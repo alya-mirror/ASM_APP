@@ -1,0 +1,9 @@
+**/node_modules/*
+**/android/*
+**/ios/*
+**/flow-typed/*
+!/__tests__/
+**//docs/*
+/dist/
+/docs/ebook/api/
+/docs/ebook/api/

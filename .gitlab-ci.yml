@@ -1,0 +1,15 @@
+image: ezdelivery/docker-android-react-native
+cache:
+  paths:
+  - node_modules/
+release:
+  script:
+    - npm install
+    - cd android
+    - chmod +x gradlew
+    - ./gradlew assembleRelease
+  artifacts:
+    paths:
+    - android/app/build/outputs/apk/app-armeabi-v7a-release.apk
+    - android/app/build/outputs/apk/app-x86-release.apk
+    - android/app/build/outputs/apk/app-release.apk
