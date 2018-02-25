@@ -15,7 +15,6 @@ import Post from '../Post';
 import content from './content';
 import Colors from '../../utils/Colors';
 import Icons from '../Core/FontAwesomeIcons';
-import SortableGrid from 'react-native-sortable-grid'
 import {SortableSudokuGrid} from '../components'
 import {DragContainer, Draggable, DropZone} from './index'
 import image_cash from './images/cash.png'
@@ -215,86 +214,10 @@ export default class Home extends PureComponent<void, Props, State> {
         );
     }
 
-    //code to start the grid
-    getColor() {
-        let r = this.randomRGB()
-        let g = this.randomRGB()
-        let b = this.randomRGB()
-        return 'rgb(' + r + ', ' + g + ', ' + b + ')'
-    }
-
-    // grid code
-    randomRGB = () => 160 + Math.random() * 85;
-    // grid code
-    startCustomAnimation = () => {
-        console.log("Custom animation started!");
-
-        Animated.timing(
-            this.state.animation,
-            {toValue: 100, duration: 500}
-        ).start(() => {
-
-            Animated.timing(
-                this.state.animation,
-                {toValue: 0, duration: 500}
-            ).start()
-
-        })
-    };// grid code
-    getDragStartAnimation = () => {
-        return {
-            transform: [
-                {
-                    scaleX: this.state.animation.interpolate({
-                        inputRange: [0, 100],
-                        outputRange: [1, -1.5],
-                    })
-                },
-                {
-                    scaleY: this.state.animation.interpolate({
-                        inputRange: [0, 100],
-                        outputRange: [1, 1.5],
-                    })
-                },
-                {
-                    rotate: this.state.animation.interpolate({
-                        inputRange: [0, 100],
-                        outputRange: ['0 deg', '450 deg']
-                    })
-                }
-            ]
-        }
-    }
-
-    startDelete = () => {
-        console.log(
-            this.refs.SortableGrid.toggleDeleteMode()
-        )
-    };
-    _renderThumbnailRow = (source, i) => (
-        <Card
-            key={i}
-            style={styles.thumbnailContainer}>
-            <Image
-                resizeMode={'cover'}
-                source={source}
-                style={styles.thumbnail}/>
-        </Card>
-    );
-
-    _onPress() {
-        this.setState({
-            startAnimation: true
-        });
-    }
 
     _onAnimationComplete() {
         this.props.logout();
         Actions.login();
-    }
-
-    onstart() {
-        console.log("Hi HI IH ");
     }
 
     _renderGridCell = (data, component) => {

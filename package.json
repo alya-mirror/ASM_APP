@@ -10,7 +10,6 @@
     "doc": "node ./docs/component-doc-generator.js"
   },
   "dependencies": {
-    
     "install": "^0.8.4",
     "npm": "^4.0.5",
     "prop-types": "^15.6.0",
@@ -23,8 +22,6 @@
     "react-native-md-textinput": "^2.0.4",
     "react-native-router-flux": "^3.36.0",
     "react-native-smart-scroll-view": "https://github.com/curvedtrunk/react-native-smart-scroll-view.git",
-    "react-native-smart-sortable-sudoku-grid": "^1.0.5",
-    "react-native-sortable-grid": "^2.0.0",
     "react-native-splash-screen": "^1.0.9",
     "react-native-vector-icons": "^4.0.0",
     "react-redux": "^5.0.1",
