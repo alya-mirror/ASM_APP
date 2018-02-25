@@ -10,6 +10,7 @@
     "doc": "node ./docs/component-doc-generator.js"
   },
   "dependencies": {
+    
     "install": "^0.8.4",
     "npm": "^4.0.5",
     "prop-types": "^15.6.0",
