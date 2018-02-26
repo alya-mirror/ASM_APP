@@ -10,6 +10,7 @@ module.exports = {
     'primary1': '#aeedd7',
     'primaryDark': '#792948',
     'success': '#4caf50',
+    'delete': '#ff0a2a',
     'background': '#ededef',
     'fadedWhite': '#fff',
     'fadedWhite1': 'rgba(255, 255, 255, .35)',

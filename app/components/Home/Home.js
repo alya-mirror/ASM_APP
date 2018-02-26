@@ -225,7 +225,7 @@ export default class Home extends PureComponent<void, Props, State> {
         return (
 
             <TouchableHighlight
-                onLongPress={()=>  this._onPressManagementButton()}
+                onLongPress={()=>  this. _activateEditPluginsOptions()}
                 disabled={this.state.disabled}
                 style={{width:80, height:80, padding: 1, position: 'relative',}}
                 onPress={ this._onPressCell.bind(this, data) }>
@@ -243,11 +243,34 @@ export default class Home extends PureComponent<void, Props, State> {
                     <Animated.View
                         style={{flex: 1, opacity: this.state.opacity, justifyContent: 'center', alignItems: 'center', }}>
                         <View
-                            style={{ borderRadius: 10, borderWidth: StyleSheet.hairlineWidth, borderColor: '#FF7F7F', width: 22, height: 22, justifyContent: 'center', alignItems: 'center', overflow: 'hidden', }}>
-                            <Image source={image_remove} style={{width: 20, height: 20, }}/>
+                            style={{ borderRadius: 10, borderWidth: StyleSheet.hairlineWidth, borderColor: '#fff', width: 22, height: 22, justifyContent: 'center', alignItems: 'center', overflow: 'hidden', }}>
+                            <Icons
+                                color={Colors.delete}
+                                name="md-remove-circle"
+                                size={18}
+                            />
+                          {/*  <Image source={image_remove} style={{width: 20, height: 20, }}/>*/}
                         </View>
                     </Animated.View>
-                </TouchableOpacity></View>
+                </TouchableOpacity>
+                    <TouchableOpacity
+                        disabled={!this.state.disabled}
+                        style={{position: 'absolute', left: 8, top: 8, width: 30, height: 30, }}
+                        onPress={this._onRemoveCellButtonPress.bind(this, component)}>
+                        <Animated.View
+                            style={{flex: 1, opacity: this.state.opacity, justifyContent: 'center', alignItems: 'center', }}>
+                            <View
+                                style={{ borderRadius: 10, borderWidth: StyleSheet.hairlineWidth, borderColor: '#fff', width: 22, height: 22, justifyContent: 'center', alignItems: 'center', overflow: 'hidden', }}>
+                                <Icons
+                                    color={Colors.grey}
+                                    name="md-settings"
+                                    size={18}
+                                />
+                                {/*<Image source={image_remove} style={{width: 20, height: 20, }}/>*/}
+                            </View>
+                        </Animated.View>
+                    </TouchableOpacity>
+                </View>
             </TouchableHighlight>
         )
     };
@@ -300,6 +323,7 @@ export default class Home extends PureComponent<void, Props, State> {
                         style={{flex: 1, opacity: this.state.opacity, justifyContent: 'center', alignItems: 'center', }}>
                         <View
                             style={{ borderRadius: 10, borderWidth: StyleSheet.hairlineWidth, borderColor: '#5CC46C', width: 22, height: 22, justifyContent: 'center', alignItems: 'center', overflow: 'hidden', }}>
+
                             <Image source={image_add} style={{width: 20, height: 20, }}/>
                         </View>
                     </Animated.View>
@@ -379,6 +403,11 @@ export default class Home extends PureComponent<void, Props, State> {
                 }
             }
         })
+    };
+    _onPress () {
+        this.setState({
+            startAnimation: true
+        });
     }
     render() {
         // DEBUG: this is materialistic here
@@ -409,7 +438,7 @@ export default class Home extends PureComponent<void, Props, State> {
 
                         <SortableSudokuGrid
                             ref={ component => this._sortableSudokuGrid = component }
-                            containerStyle={{ backgroundColor: '#fff', paddingTop:10,}}
+                            containerStyle={{ backgroundColor: '#fff', paddingTop:5,}}
                             columnCount={columnCount}
                             dataSource={this.state.dataSource}
                             renderCell={this._renderGridCell}
@@ -441,7 +470,7 @@ export default class Home extends PureComponent<void, Props, State> {
                     >
                         <Icons
                             color={Colors.white}
-                            name="sign-out"
+                            name="md-add"
                             size={24}
                         />
                     </Fab>
