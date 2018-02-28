@@ -40,9 +40,9 @@ const {width: WINDOW_WIDTH} = Dimensions.get('window');
 
 export default class Login extends PureComponent<void, void, State> {
     state: State = {
-        email: 'a',
+        email: 'sarah@sarah.com',
         emailErrorMessage: null,
-        password: 'a',
+        password: 'sarah123',
         passwordErrorMessage: null,
         startAnimation: false,
         startAnimationSignUp: false,
@@ -72,7 +72,31 @@ export default class Login extends PureComponent<void, void, State> {
     _onPress () {
         dismissKeyboard();
         if (!this.state.emailErrorMessage && this.state.email && !this.state.passwordErrorMessage && this.state.password) {
-            this._updateRecord();
+
+            return fetch('http://192.168.100.7:3100/api/user/login', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        email: this.state.email,
+                        password: this.state.password,
+                    }
+                )
+            })
+                .then((response) => {
+                    if(response.status === 200){
+                        this._updateRecord();
+                    }
+
+                })
+
+                .catch((error) => {
+                    console.log(error);
+
+                });
         }
         else {
             // smooth keyboard animation
