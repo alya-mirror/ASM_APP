@@ -6,7 +6,7 @@ import Router from './router';
 import configureStore from './store/configureStore';
 import SplashScreen from 'react-native-splash-screen';
 import * as Animatable from 'react-native-animatable';
-import {
+/*import {
     BallIndicator,
     BarIndicator,
     DotIndicator,
@@ -16,7 +16,7 @@ import {
     SkypeIndicator,
     UIActivityIndicator,
     WaveIndicator,
-} from 'react-native-indicators';
+} from 'react-native-indicators';*/
 const {Component} = React;
 const {View} = ReactNative;
 

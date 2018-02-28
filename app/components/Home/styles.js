@@ -3,18 +3,19 @@ import {StyleSheet,
 import Colors from '../../utils/Colors';
 const {width: WINDOW_WIDTH , height: WINDOW_HEIGHT} = Dimensions.get('window');
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     homeContainer:
         {
-            backgroundColor:'#ff8227',
+            backgroundColor:'#f1f1e9',
             width:'100%',
             height:'100%',
-            padding:'1%',
+          //  padding:'1%',
         },
     homeComponentHolder:
-        {backgroundColor:'#fff',
+        {
+            backgroundColor:'#f1f1e9',
             width:'100%',
-            paddingTop:'3%',
+            paddingTop:'7%',
             height:'100%',
             padding:'1%',
         },
@@ -54,7 +55,58 @@ const styles = StyleSheet.create({
         bottom: 30,
         right: 30,
         borderRadius: 20,
+    },
+    fabButtonLeft: {
+        position: 'absolute',
+        bottom: 30,
+        left: 30,
+        borderRadius: 20,
+    },
+    pluginContainerStyle:{
+      flex:1,
+        marginTop:5,
+        marginBottom:5,
+        borderRadius: 20,
+        position:'relative',
+       // backgroundColor: '#8aff7b',
+    },
+});
+export  const searchBox = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        justifyContent: 'flex-start'
+    },
+    emailItem:{
+        borderBottomWidth: 0.5,
+        borderColor: 'rgba(0,0,0,0.3)',
+        padding: 10
+    },
+    emailSubject: {
+        color: 'rgba(0,0,0,0.5)'
+    },
+    searchInput:{
+        marginTop:'7%',
+        padding: 10,
+        //flex:1,
+        borderRadius:40,
+        left:30,
+        alignItems:'center',
+        width:'85%',
+        height:30,
+        borderColor: '#CCC',
+        borderWidth: 1
+    },
+    searchInputPop:{
+        marginTop:'7%',
+        padding: 5,
+        //flex:1,
+        left:25,
+        borderRadius:40,
+        alignItems:'center',
+        width:'85%',
+        height:30,
+        borderColor: '#CCC',
+        borderWidth: 1
     }
 });
-
-export default styles;
