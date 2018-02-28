@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(000, 000, 000, .2)',
         paddingBottom: 20,
         flexDirection: 'column',
-        paddingLeft:"10%",
-        paddingRight:"10%",
+        paddingLeft: "10%",
+        paddingRight: "10%",
     },
     signUpText: {
         color: Colors.white,
@@ -47,11 +47,43 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     signUpTextView: {
-        flexDirection:'row',
+        flexDirection: 'row',
         marginTop: 10,
-        alignItems:'center',
-        justifyContent:'center',
+        alignItems: 'center',
+        justifyContent: 'center',
     }
+});
+export const TrainingScreenStyle = StyleSheet.create({
+    container:
+        {
+            //flex: 1,
+            width: '100%',
+            height:200,
+            padding:'10%',
+            marginTop:'35%',
+            left:30,
+
+        },
+    welcomeText:
+        {
+            fontSize: 30,
+            fontWeight: '600',
+            color:Colors.primary,
+        },
+    subTitleWelcomeText:
+        {
+            paddingTop:0,
+            fontSize: 13,
+            fontWeight: '600',
+            color:Colors.white,
+        },
+    startingText:
+        {
+            fontSize: 12,
+            //color:Colors.primaryDark,
+            fontWeight: '400',
+            paddingTop:10,
+        },
 });
 
 export default styles;

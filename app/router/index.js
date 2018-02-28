@@ -4,7 +4,9 @@ import ReactNative from 'react-native';
 import {connect} from 'react-redux';
 import {Actions, Router, Scene} from 'react-native-router-flux';
 import HomeContainer from '../components/Home/HomeContainer';
+import PluginSetting from '../components/Home/PluginSettings';
 import LoginContainer from '../components/Auth/LoginContainer';
+import TrainContainer from '../components/Auth/TrainContainer';
 import SignUpContainer from '../components/Auth/SignUpContainer';
 import NavigationDrawer from '../components/NavigationDrawer';
 import Colors from '../utils/Colors';
@@ -98,7 +100,7 @@ export default class AppRouter extends PureComponent {
             >
                 <View style={routerStyles.iconContainer}>
                     <MaterialIcons
-                        name="menu"
+                        name="md-menu"
                         size={24}
                         style={routerStyles.icon}
                     />
@@ -106,7 +108,22 @@ export default class AppRouter extends PureComponent {
             </TouchButton>
         );
     }
-    
+    _renderNavigationBackButton () {
+        return (
+            <TouchButton
+                borderless
+                onPress={() => {Actions.home();}}
+            >
+                <View style={routerStyles.iconContainer}>
+                    <MaterialIcons
+                        name="md-arrow-round-back"
+                        size={24}
+                        style={routerStyles.icon}
+                    />
+                </View>
+            </TouchButton>
+        );
+    }
     render () {
         return (
             <RouterContainer getSceneStyle={getScenceStyle}>
@@ -140,13 +157,31 @@ export default class AppRouter extends PureComponent {
                             type="reset"
                         />
                         <Scene
-                            component={SignUpContainer}
+                        component={SignUpContainer}
+                        duration={0}
+                        hideNavBar
+                        isDrawerEnable={false}
+                        key="signUp"
+                        renderBackButton={this._renderNavigationDrawer.bind(this)}
+                        title="Trending"
+                        type="reset"
+                    />
+                        <Scene
+                            component={PluginSetting}
+                            duration={0}
+                            isDrawerEnable={false}
+                            key="PluginSetting"
+                            renderBackButton={this._renderNavigationBackButton.bind(this)}
+                            title="Plugin Setting"
+                            type="reset"
+                        />
+                        <Scene
+                            component={TrainContainer}
                             duration={0}
                             hideNavBar
                             isDrawerEnable={false}
-                            key="signUp"
-                            renderBackButton={this._renderNavigationDrawer.bind(this)}
-                            title="Trending"
+                            key="TrainContainer"
+                            title="TrainContainer"
                             type="reset"
                         />
                     </Scene>

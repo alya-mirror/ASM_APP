@@ -16,9 +16,9 @@ const routes = [
     },
     {
         name: 'Trend',
-        path: 'trend',
+        path: 'login',
         default: true,
-        pressPath: 'home',
+        pressPath: 'login',
         longPressPath: 'home',
     },
     {
@@ -40,7 +40,7 @@ const routes = [
         path: 'logout',
         default: false,
         pressPath: 'home',
-        longPressPath: 'home',
+        longPressPath: 'login',
     },
 ];
 
