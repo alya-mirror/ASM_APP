@@ -86,9 +86,9 @@ export default class SignUp extends PureComponent<void, void, State> {
                          firstName: this.state.firstName
                      }
                  )
-             })
-                 .then((response) => {
-                    if(response.status === 201){
+             }).then((response) => response.json())
+                 .then((responseJson) => {
+                    if(responseJson.status === 201){
                         this._updateRecord();
                     }
 
@@ -110,8 +110,9 @@ export default class SignUp extends PureComponent<void, void, State> {
 
     }
 
+
     _onAnimationComplete() {
-        Actions.home();
+            Actions.home();
     }
 
     async _updateRecord() {

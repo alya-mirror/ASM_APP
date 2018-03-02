@@ -12,7 +12,7 @@ import GroupTextField from '../Core/GroupTextField';
 import AppText from '../Core/AppText';
 import AppTextButton from '../Core/AppTextButton';
 import {validateEmail, validatePassword} from '../../lib/validator';
-
+var io = require('socket.io-client');
 const {
     PureComponent,
 } = React;
@@ -39,7 +39,15 @@ type State = {
 const {width: WINDOW_WIDTH} = Dimensions.get('window');
 
 export default class Login extends PureComponent<void, void, State> {
-    state: State = {
+
+    constructor(props) {
+        super(props);
+        this.url = 'http://localhost:3100';
+        this.socket = io.connect('http://localhost:3100', {reconnect: true});
+        this.socket.on('connect', function () {
+            console.log('connected')
+        });
+    this.state = {
         email: 'sarah@sarah.com',
         emailErrorMessage: null,
         password: 'sarah123',
@@ -49,6 +57,7 @@ export default class Login extends PureComponent<void, void, State> {
         isRecordUpdating: false,
         hideWelcomeMessage: false,
     };
+    }
     
     componentWillMount () {
         // Using keyboardWillShow/Hide looks 1,000 times better, but doesn't work on Android
@@ -85,11 +94,17 @@ export default class Login extends PureComponent<void, void, State> {
                         password: this.state.password,
                     }
                 )
-            })
-                .then((response) => {
-                    if(response.status === 200){
-                        this._updateRecord();
-                    }
+            })   .then((response) => response.json())
+                .then((responseJson) => {
+                console.log('log in ' +  JSON.stringify(responseJson))
+                        global.userInfo=responseJson;
+                        if(global.userInfo.trained){
+                            this._fetchUserAddons();
+                        }
+                        else{
+                            this._trainUser(global.userInfo.userId);
+                        }
+
 
                 })
 
@@ -106,6 +121,46 @@ export default class Login extends PureComponent<void, void, State> {
         }
         
     }
+
+
+    _trainUser(userID){
+        console.log("hello from train" , userID)
+
+
+        this.socket.emit('start_training', {"data":{"userId":userID}} );
+
+        this.socket.on('finished_training',  (userData) => {
+            console.log('complete training', userData)
+            /*   if(userData.data.userId === global.userInfo.userID){
+             this._fetchUserAddons();
+             }*/
+
+        });
+    }
+
+    _fetchUserAddons(){
+        return fetch('http://192.168.100.7:3100/api/addons/:userId', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json'
+            },
+        })   .then((response) => response.json())
+            .then((responseJson) => {
+                console.log('user addons are  ' +  JSON.stringify(responseJson))
+                if(responseJson.status === 200){
+                    global.userAddons=responseJson;
+                    this._updateRecord();
+                }
+
+            })
+
+            .catch((error) => {
+                console.log(error);
+
+            });
+    }
+
 
     _onAnimationComplete () {
         Actions.home();
