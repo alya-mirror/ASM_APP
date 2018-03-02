@@ -121,6 +121,8 @@ export default class BaseButton extends PureComponent<Props, Props, State> {
         style: PropTypes.any,
         /** Button text, if children is not added */
         text: PropTypes.string,
+        /** Button when the training is done */
+        completeActionTraining: PropTypes.bool,
     };
     
     static defaultProps:Props = {

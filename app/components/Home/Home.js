@@ -1,13 +1,16 @@
 import React from 'react';
+
 const {
     PureComponent,
     PropTypes
 } = React;
 import * as Animatable from 'react-native-animatable';
-import {ScrollView, Image, StatusBar, View, Text, LayoutAnimation,
-    Alert, Animated,TouchableOpacity,TouchableHighlight,TouchableWithoutFeedback,StyleSheet,} from 'react-native';
+import {
+    ScrollView, Image, StatusBar, View, Text, LayoutAnimation,
+    Alert, Animated, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, StyleSheet,
+} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import styles from './styles';
+import {styles, searchBox} from './styles';
 import {Fab} from '../AnimatedButton';
 import Card from '../Core/Card';
 import AppText from '../Core/AppText';
@@ -15,7 +18,7 @@ import Post from '../Post';
 import content from './content';
 import Colors from '../../utils/Colors';
 import Icons from '../Core/FontAwesomeIcons';
-import SortableGrid from 'react-native-sortable-grid'
+import SearchInput, {createFilter} from 'react-native-search-filter';
 import {SortableSudokuGrid} from '../components'
 import {DragContainer, Draggable, DropZone} from './index'
 import image_cash from './images/cash.png'
@@ -27,11 +30,12 @@ import image_payment from './images/payment.png'
 import image_shopping from './images/shopping.png'
 import image_service from './images/service.png'
 import image_donate from './images/donate.png'
-
+import PopupDialog from 'react-native-popup-dialog';
 import image_add from './images/add.png'
 import image_remove from './images/remove.png'
 import image_locked from './images/locked.png'
 
+const KEYS_TO_FILTERS = ['title'];
 const dataList = [
     {
         icon: image_cash,
@@ -55,19 +59,40 @@ const dataList = [
     },
     {
         icon: image_payment,
-        title: 'payment',
+        title: 'pay',
     },
     {
         icon: image_shopping,
-        title: 'shopping',
+        title: 'shop',
     },
     {
         icon: image_service,
         title: 'service',
+    }, {
+        icon: image_donate,
+        title: 'donate',
+    }, {
+        icon: image_donate,
+        title: 'Clock',
+    }, {
+        icon: image_donate,
+        title: 'Amazon',
+    }, {
+        icon: image_donate,
+        title: '3',
+    }, {
+        icon: image_donate,
+        title: '4',
     },
     {
         icon: image_donate,
-        title: 'donate',
+        title: '5',
+    }, {
+        icon: image_donate,
+        title: '6',
+    }, {
+        icon: image_donate,
+        title: '7',
     },
 ];
 
@@ -80,77 +105,6 @@ type State = {
 type Props = {
     logout: Function,
 }
-
-class MyDropZoneContent extends React.Component {
-    componentWillReceiveProps({dragOver}) {
-        if (dragOver !== this.props.dragOver) LayoutAnimation.easeInEaseOut();
-    }
-
-    render() {
-        return <View style={{
-            width: this.props.dragOver ? 110 : 100,
-            height: this.props.dragOver ? 110 : 100,
-            backgroundColor: '#ddd',
-            alignItems: 'center',
-            justifyContent: 'center'
-        }}>
-            <View>
-                <Text>{"LET GO"}</Text>
-            </View>
-        </View>
-    }
-}
-
-class DeleteZone extends React.Component {
-    componentWillReceiveProps({dragOver}) {
-        if (dragOver !== this.props.dragOver) LayoutAnimation.easeInEaseOut();
-    }
-
-    render() {
-        return <View style={{
-            top: this.props.dragOver ? 0 : -100,
-            height: 100,
-            backgroundColor: 'red',
-            alignItems: 'center',
-            justifyContent: 'center'
-        }}>
-            <View>
-                <Text>{'DELETE'}</Text>
-            </View>
-        </View>
-    }
-}
-
-class DraggyInner extends React.Component {
-    render() {
-        if (this.props.dragOver && !this.props.ghost && !this.props.dragging) {
-            return <View style={{height: 100, width: 100, backgroundColor: 'green'}}/>
-        }
-        let shadows = {
-            shadowColor: 'black',
-            shadowOffset: {width: 0, height: 20},
-            shadowOpacity: .5,
-            shadowRadius: 20,
-            opacity: .5
-        };
-        return <View style={[{
-            height: 100,
-            width: 100,
-            backgroundColor: this.props.ghost ? '#fff' : '#237'
-        }, this.props.dragging ? shadows : null]}/>
-    }
-}
-
-class Draggy extends React.Component {
-    render() {
-        return <Draggable data="Whatevs" style={{margin: 7.5}}>
-            <DropZone>
-                <DraggyInner/>
-            </DropZone>
-        </Draggable>
-    }
-}
-
 export default class Home extends PureComponent<void, Props, State> {
     static propTypes: Props = {
         logout: PropTypes.func,
@@ -166,8 +120,12 @@ export default class Home extends PureComponent<void, Props, State> {
             dataSource: [...dataList],
             candidates: [],
             sortable: false,
-            longPressActivatedForManaging:false,
-            startAnimationValueTo:0,
+            longChecked: true,
+            longCheckedPop: false,
+            searchTerm: '',
+            searchTermPop: '',
+            longPressActivatedForManaging: false,
+            startAnimationValueTo: 0,
             scrollEnabled: true,
             disabled: false,
             managementButtonText: 'Manage',
@@ -180,121 +138,20 @@ export default class Home extends PureComponent<void, Props, State> {
     }
 
     componentDidMount() {
-        try {
-
-           // var contextTest = new Map();
-
-
-        }
-        catch (error) {
-         //   bugsnag.notify(error);
-            Alert.alert(
-                'Wait!',
-                'Sorry!' + error,
-                [
-                    {
-                        text: 'Ignore', onPress: () => console.log('Cancel Pressed'), style: 'cancel'
-                    },]
-                , {cancelable: false}
-            );
-        }
-    }
-
-    _renderPost(post, i) {
-        return (
-            <Post
-                avatarImage={post.profile}
-                city={post.city}
-                image={post.image}
-                key={i}
-                message={post.message}
-                name={post.name}
-                time={post.time}
-                username={post.username}
-            />
-        );
-    }
-
-    //code to start the grid
-    getColor() {
-        let r = this.randomRGB()
-        let g = this.randomRGB()
-        let b = this.randomRGB()
-        return 'rgb(' + r + ', ' + g + ', ' + b + ')'
-    }
-
-    // grid code
-    randomRGB = () => 160 + Math.random() * 85;
-    // grid code
-    startCustomAnimation = () => {
-        console.log("Custom animation started!");
-
-        Animated.timing(
-            this.state.animation,
-            {toValue: 100, duration: 500}
-        ).start(() => {
-
-            Animated.timing(
-                this.state.animation,
-                {toValue: 0, duration: 500}
-            ).start()
-
-        })
-    };// grid code
-    getDragStartAnimation = () => {
-        return {
-            transform: [
-                {
-                    scaleX: this.state.animation.interpolate({
-                        inputRange: [0, 100],
-                        outputRange: [1, -1.5],
-                    })
-                },
-                {
-                    scaleY: this.state.animation.interpolate({
-                        inputRange: [0, 100],
-                        outputRange: [1, 1.5],
-                    })
-                },
-                {
-                    rotate: this.state.animation.interpolate({
-                        inputRange: [0, 100],
-                        outputRange: ['0 deg', '450 deg']
-                    })
-                }
-            ]
-        }
-    }
-
-    startDelete = () => {
-        console.log(
-            this.refs.SortableGrid.toggleDeleteMode()
-        )
-    };
-    _renderThumbnailRow = (source, i) => (
-        <Card
-            key={i}
-            style={styles.thumbnailContainer}>
-            <Image
-                resizeMode={'cover'}
-                source={source}
-                style={styles.thumbnail}/>
-        </Card>
-    );
-
-    _onPress() {
-        this.setState({
-            startAnimation: true
-        });
     }
 
     _onAnimationComplete() {
-        this.props.logout();
-        Actions.login();
+        // this.props.logout();
+        this.popupDialog.show();
+        //  Actions.login();
     }
 
-    onstart() {
-        console.log("Hi HI IH ");
+    searchUpdated(term) {
+        this.setState({searchTerm: term})
+    }
+
+    searchUpdatedPop(term) {
+        this.setState({searchTermPop: term})
     }
 
     _renderGridCell = (data, component) => {
@@ -302,86 +159,154 @@ export default class Home extends PureComponent<void, Props, State> {
         return (
 
             <TouchableHighlight
-                onLongPress={()=>  this._onPressManagementButton()}
+                onLongPress={() => this._activateEditPluginsOptions()}
                 disabled={this.state.disabled}
-                style={{width:80, height:80, padding: 1, position: 'relative',}}
-                onPress={ this._onPressCell.bind(this, data) }>
-                <View style={{flex: 1, padding: 1, position: 'relative', backgroundColor:"#ff" }}>
-                <View style={{ overflow: 'hidden', backgroundColor: '#fff',
-                    justifyContent: 'center', alignItems: 'center', flex: 1,
-                    borderWidth: StyleSheet.hairlineWidth, borderColor: '#eee', }}>
-                    <Image source={data.icon} style={{width: 30, height: 30, marginHorizontal: 5, marginBottom: 5,}}/>
-                    <Text>{data.title}</Text>
+                underlayColor={"#fff"}
+                style={{width: 75, height: 75, padding: 1, position: 'relative', borderRadius: 60,}}
+                onPress={this._onPressCell.bind(this, data)}>
+                <View style={{flex: 1, padding: 1, position: 'relative', backgroundColor: "#fff", borderRadius: 60,}}>
+                    <View style={{
+                        overflow: 'hidden',
+                        justifyContent: 'center', alignItems: 'center', flex: 1,
+                    }}>
+                        <Image source={data.icon}
+                               style={{width: 30, height: 30, marginHorizontal: 5, marginBottom: 5,}}/>
+                        <Text>{data.title}</Text>
+                    </View>
+                    <TouchableOpacity
+                        disabled={!this.state.disabled}
+                        style={{position: 'absolute', right: 8, top: 15, width: 30, height: 30,}}
+                        onPress={this._onRemoveCellButtonPress.bind(this, component)}>
+                        <Animated.View
+                            style={{
+                                flex: 1,
+                                opacity: this.state.opacity,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                            <View
+                                style={{
+                                    borderRadius: 10,
+                                    borderWidth: StyleSheet.hairlineWidth,
+                                    borderColor: '#fff',
+                                    width: 22,
+                                    height: 22,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    overflow: 'hidden',
+                                    backgroundColor: '#fff'
+                                }}>
+                                <Icons
+                                    color={Colors.delete}
+                                    name="md-remove-circle"
+                                    size={18}
+                                />
+                                {/*  <Image source={image_remove} style={{width: 20, height: 20, }}/>*/}
+                            </View>
+                        </Animated.View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        disabled={!this.state.disabled}
+                        style={{position: 'absolute', left: 8, top: 15, width: 30, height: 30,}}
+                        onPress={this._onSettingCellButtonPress.bind(this, component, data)}>
+                        <Animated.View
+                            style={{
+                                flex: 1,
+                                opacity: this.state.opacity,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                            <View
+                                style={{
+                                    backgroundColor: '#fff',
+                                    borderRadius: 10,
+                                    borderWidth: StyleSheet.hairlineWidth,
+                                    borderColor: '#fff',
+                                    width: 22,
+                                    height: 22,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    overflow: 'hidden',
+                                }}>
+                                <Icons
+                                    color={Colors.grey}
+                                    name="md-settings"
+                                    size={18}
+                                />
+                                {/*<Image source={image_remove} style={{width: 20, height: 20, }}/>*/}
+                            </View>
+                        </Animated.View>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                    disabled={!this.state.disabled}
-                    style={{position: 'absolute', right: 8, top: 8, width: 30, height: 30, }}
-                    onPress={this._onRemoveCellButtonPress.bind(this, component)}>
-                    <Animated.View
-                        style={{flex: 1, opacity: this.state.opacity, justifyContent: 'center', alignItems: 'center', }}>
-                        <View
-                            style={{ borderRadius: 10, borderWidth: StyleSheet.hairlineWidth, borderColor: '#FF7F7F', width: 22, height: 22, justifyContent: 'center', alignItems: 'center', overflow: 'hidden', }}>
-                            <Image source={image_remove} style={{width: 20, height: 20, }}/>
-                        </View>
-                    </Animated.View>
-                </TouchableOpacity></View>
             </TouchableHighlight>
         )
     };
 
-    _activateEditPluginsOptions()
-    {
+    _activateEditPluginsOptions() {
         try {
-            if(this.state.longPressActivatedForManaging === false) {
-           /*     this.setState({longPressActivatedForManaging: true, startAnimationValueTo: 50},
-                    Animated.timing(this.state.animated.fromPositiontop, {
-                        toValue: this.state.startAnimationValueTo,
-                        duration: 725,
-                        delay: 100
-                    }).start());*/
-               this._onPressManagementButton();
+            if (this.state.longPressActivatedForManaging === false) {
+                this._onPressManagementButton();
+                this.setState({longChecked: false});
+                this.setState({longCheckedPop: true});
             }
-            else if(this.state.longPressActivatedForManaging === true)
-            {
-                this.setState({longPressActivatedForManaging: false, startAnimationValueTo: 0},
-                    Animated.timing(this.state.animated.fromPositiontop, {
-                        toValue: this.state.startAnimationValueTo,
-                        duration: 725,
-                        delay: 100
-                    }).start())
+            else if (this.state.longPressActivatedForManaging === true) {
             }
-        }catch (error)
-        {
-            Alert.alert('clicked grid cell -> ' )
+        } catch (error) {
+            Alert.alert('clicked grid cell -> ')
         }
     }
 
     _renderCandidateCell = (data, component) => {
         //console.log(`rerender!!! _renderCandidates`)
         return (
-            <TouchableOpacity
+            <TouchableHighlight
+                onLongPress={() => this._activateEditPluginsOptions()}
                 disabled={this.state.disabled}
-                style={{flex: 1, padding: 6, position: 'relative', backgroundColor:"#182"}}
-                onPress={ this._onPressCandidateCell.bind(this, data) }>
-                <View style={{ overflow: 'hidden', backgroundColor: '#fff',
-                    justifyContent: 'center', alignItems: 'center', flex: 1,
-                    borderWidth: StyleSheet.hairlineWidth, borderColor: '#eee', }}>
-                    <Image source={data.icon} style={{width: 30, height: 30, marginHorizontal: 10, marginBottom: 10,}}/>
-                    <Text>{data.title}</Text>
+                underlayColor={"#fff"}
+                style={{width: 70, height: 70, padding: 1, position: 'relative', borderRadius: 20,}}
+                onPress={this._onPressCandidateCell.bind(this, data)}>
+                <View style={{flex: 1, padding: 1, position: 'relative', backgroundColor: "#fff"}}>
+                    <View style={{
+                        overflow: 'hidden', backgroundColor: '#fff',
+                        justifyContent: 'center', alignItems: 'center', flex: 1,
+                    }}>
+                        <Image source={data.icon}
+                               style={{width: 30, height: 30, marginHorizontal: 10, marginBottom: 10,}}/>
+                        <Text>{data.title}</Text>
+                    </View>
+                    <TouchableOpacity
+                        disabled={!this.state.disabled}
+                        style={{position: 'absolute', left: 5, top: 8, width: 30, height: 30,}}
+                        onPress={this._onRemoveCandidatesCellButtonPress.bind(this, component)}>
+                        <Animated.View
+                            style={{
+                                flex: 1,
+                                opacity: this.state.opacity,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                            <View
+                                style={{
+                                    backgroundColor: '#fff',
+                                    borderRadius: 10,
+                                    borderWidth: StyleSheet.hairlineWidth,
+                                    borderColor: '#5CC46C',
+                                    width: 20,
+                                    height: 20,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    overflow: 'hidden',
+                                }}>
+                                <Icons
+                                    color={Colors.success}
+                                    name="md-add-circle"
+                                    size={18}
+                                />
+                            </View>
+                        </Animated.View>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                    disabled={!this.state.disabled}
-                    style={{position: 'absolute', right: 8, top: 8, width: 30, height: 30, }}
-                    onPress={this._onRemoveCandidatesCellButtonPress.bind(this, component)}>
-                    <Animated.View
-                        style={{flex: 1, opacity: this.state.opacity, justifyContent: 'center', alignItems: 'center', }}>
-                        <View
-                            style={{ borderRadius: 10, borderWidth: StyleSheet.hairlineWidth, borderColor: '#5CC46C', width: 22, height: 22, justifyContent: 'center', alignItems: 'center', overflow: 'hidden', }}>
-                            <Image source={image_add} style={{width: 20, height: 20, }}/>
-                        </View>
-                    </Animated.View>
-                </TouchableOpacity>
-            </TouchableOpacity>
+            </TouchableHighlight>
         )
     };
     _onPressCell = (data) => {
@@ -426,7 +351,7 @@ export default class Home extends PureComponent<void, Props, State> {
                 //let sortedDataSource = this._sortableSudokuGrid.getSortedDataSource()
                 console.log(`_onRemoveCellButtonPress get sortedDataSource`)
                 //console.log(sortedDataSource)
-                if(removedDataList.length > 0) {
+                if (removedDataList.length > 0) {
                     let data = removedDataList[0]
                     this._candidatesSudokuGrid.addCell({
                         data,
@@ -435,7 +360,28 @@ export default class Home extends PureComponent<void, Props, State> {
             }
         })
     };
-
+    _onSettingCellButtonPress = (component, data) => {
+        let cellIndex = this._sortableSudokuGrid._cells.findIndex((cell) => {
+            return cell.component === component
+        });
+        //console.log(`_onRemoveCellButtonPress cellIndex = ${cellIndex}`)
+        // Alert.alert('clicked grid cell -> ' + data.title)
+        Actions.PluginSetting({text: data.title});
+        this._sortableSudokuGrid.removeCell({
+            cellIndex,
+            callback: (removedDataList) => {
+                //let sortedDataSource = this._sortableSudokuGrid.getSortedDataSource()
+                console.log(`_onRemoveCellButtonPress get sortedDataSource`)
+                //console.log(sortedDataSource)
+                if (removedDataList.length > 0) {
+                    let data = removedDataList[0]
+                    this._candidatesSudokuGrid.addCell({
+                        data,
+                    })
+                }
+            }
+        })
+    };
     _onRemoveCandidatesCellButtonPress = (component) => {
         let cellIndex = this._candidatesSudokuGrid._cells.findIndex((cell) => {
             return cell.component === component
@@ -448,7 +394,7 @@ export default class Home extends PureComponent<void, Props, State> {
                 //let sortedDataSource = this._candidatesSudokuGrid.getSortedDataSource()
                 //console.log(`_onRemoveCandidatesCellButtonPress get sortedDataSource`)
                 //console.log(sortedDataSource)
-                if(removedDataList.length > 0) {
+                if (removedDataList.length > 0) {
                     let data = removedDataList[0]
                     this._sortableSudokuGrid.addCell({
                         data,
@@ -456,61 +402,74 @@ export default class Home extends PureComponent<void, Props, State> {
                 }
             }
         })
+    };
+
+    _onPress() {
+        /*   this.setState({
+                startAnimation: true
+            });*/
+        this.popupDialog.show();
     }
+
+    _onPressComplete() {
+        this.setState({longChecked: true});
+        this.setState({longCheckedPop: false});
+        this._onPressManagementButton();
+    }
+
     render() {
-        // DEBUG: this is materialistic here
-        console.log("Hi");
+        const filteredDataList = this.state.dataSource.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
+        const dataGridSource = filteredDataList;
+        const filteredDataListPop = this.state.candidates.filter(createFilter(this.state.searchTermPop, KEYS_TO_FILTERS));
+        const dataGridSourceCandidates = filteredDataListPop;
         return (
             <View style={styles.homeContainer}>
                 <View style={styles.homeComponentHolder}>
                     {/*<Text style={{fontWeight: 'bold', marginTop: 10, color:'#000', fontSize:10}}>Custom animation</Text>
                     */}
+
+                    <SearchInput
+                        onChangeText={(term) => {
+                            this.searchUpdated(term)
+                        }}
+                        style={searchBox.searchInput}
+                        placeholder="Type a message to search"
+                    />
                     <View
                         //scrollEnabled={this.state.scrollEnabled}
-                        style={{marginTop: 20, }}>
-{/*
-                        {this.state.longPressActivatedForManaging === true ?
-                            ( <Animated.View
-                                style={{ height:this.state.animated.fromPositiontop, paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
-                                <View style={{flex: 1, justifyContent: 'center',}}>
-                                    <Text>My Applications: </Text>
-                                </View>
-                                <TouchableOpacity
-                                    onPress={this._onPressManagementButton}>
-                                    <View style={{flex: 1, justifyContent: 'center',}}>
-                                        <Text>{this.state.managementButtonText}</Text>
-                                    </View>
-                                </TouchableOpacity>
-
-                            </Animated.View> ): null}*/}
-
-                        <SortableSudokuGrid
-                            ref={ component => this._sortableSudokuGrid = component }
-                            containerStyle={{ backgroundColor: '#fff', paddingTop:10,}}
-                            columnCount={columnCount}
-                            dataSource={this.state.dataSource}
-                            renderCell={this._renderGridCell}
-                            sortable={this.state.sortable}
-                        />
-                        <View
-                            style={{height: 50, paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor:'#000' }}>
-                            <View style={{flex: 1, justifyContent: 'center',}}>
-                                <Text>Candidates: </Text>
-                            </View>
-                        </View>
-                        <SortableSudokuGrid
-                            ref={ component => this._candidatesSudokuGrid = component }
-                            containerStyle={{ backgroundColor: '#fff',}}
-                            columnCount={columnCount}
-                            dataSource={this.state.candidates}
-                            renderCell={this._renderCandidateCell}
-                            sortable={false}
-                        />
+                        style={{marginTop: 15, backgroundColor: 'transparent', alignItems: 'center',}}>
+                        <ScrollView showsVerticalScrollIndicator={false}>
+                            <SortableSudokuGrid
+                                ref={component => this._sortableSudokuGrid = component}
+                                containerStyle={{backgroundColor: 'transparent', alignItems: 'center',}}
+                                columnCount={columnCount}
+                                rowWidth={300}
+                                rowHeight={80}
+                                dataSource={this.state.dataSource}
+                                renderCell={this._renderGridCell}
+                                sortable={this.state.sortable}
+                            />
+                        </ScrollView>
                     </View>
-                    <Fab
-                        duration={1000}
+                    {this.state.longChecked === true ? (
+                        <Fab
+                            //duration={1000}
+                            onComplete={this._onAnimationComplete.bind(this)}
+                            onPress={this._onPress.bind(this)}
+                            rippleColor={Colors.fadedWhite}
+                            startAnimation={this.state.startAnimation}
+                            style={styles.fabButton}
+                            width={50}
+                        >
+                            <Icons
+                                color={Colors.white}
+                                name="md-add"
+                                size={24}
+                            />
+                        </Fab>) : (<Fab
+                        //  duration={1000}
                         onComplete={this._onAnimationComplete.bind(this)}
-                        onPress={this._onPress.bind(this)}
+                        onPress={this._onPressComplete.bind(this)}
                         rippleColor={Colors.fadedWhite}
                         startAnimation={this.state.startAnimation}
                         style={styles.fabButton}
@@ -518,10 +477,48 @@ export default class Home extends PureComponent<void, Props, State> {
                     >
                         <Icons
                             color={Colors.white}
-                            name="sign-out"
+                            name="md-checkmark-circle"
                             size={24}
                         />
-                    </Fab>
+                    </Fab>)}
+
+                    <PopupDialog
+                        dialogTitle={
+
+                            <SearchInput
+                                onChangeText={(term) => {
+                                    this.searchUpdatedPop(term)
+                                }}
+                                style={searchBox.searchInputPop}
+                                placeholder="Search"
+                            />}
+                        dialogStyle={{borderRadius: 50}}
+                        dialogAnimation={'FadeAnimation'}
+                        width={'80%'}
+                        height={350}
+                        ref={(fadeAnimationDialog) => {
+                            this.popupDialog = fadeAnimationDialog;
+                        }}
+                    >
+                        <View style={styles.pluginContainerStyle}>
+                            <ScrollView style={{backgroundColor: 'transparent', padding: 5, borderRadius: 30,}}>
+                                <SortableSudokuGrid
+                                    rowWidth={330}
+                                    ref={component => this._candidatesSudokuGrid = component}
+                                    containerStyle={{
+                                        backgroundColor: 'transparent',
+                                        padding: 5,
+                                        borderRadius: 30,
+                                        position: 'relative',
+                                    }}
+                                    columnCount={4}
+                                    dataSource={this.state.candidates}
+                                    renderCell={this._renderCandidateCell}
+                                    sortable={false}
+                                />
+                            </ScrollView>
+                        </View>
+                    </PopupDialog>
                 </View>
             </View>
         );
