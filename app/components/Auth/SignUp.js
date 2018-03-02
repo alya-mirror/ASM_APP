@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ReactNative from 'react-native';
 import {Actions} from 'react-native-router-flux';
@@ -40,6 +39,7 @@ const {width: WINDOW_WIDTH} = Dimensions.get('window');
 
 export default class SignUp extends PureComponent<void, void, State> {
     state: State = {
+        firstName: '',
         email: '',
         emailErrorMessage: null,
         password: '',
@@ -48,45 +48,74 @@ export default class SignUp extends PureComponent<void, void, State> {
         isRecordUpdating: false,
         hideWelcomeMessage: false,
     };
-    
-    componentWillMount () {
+
+    componentWillMount() {
         // Using keyboardWillShow/Hide looks 1,000 times better, but doesn't work on Android
         // TODO: Revisit this if Android begins to support - https://github.com/facebook/react-native/issues/3468
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
     }
-    
-    _keyboardDidShow () {
+
+    _keyboardDidShow() {
         this.setState({
             hideWelcomeMessage: true
         });
     }
-    
-    _keyboardDidHide () {
+
+    _keyboardDidHide() {
         this.setState({
             hideWelcomeMessage: false
         });
     }
-    
-    _onPress () {
-        dismissKeyboard();
-        if (!this.state.emailErrorMessage && this.state.email && !this.state.passwordErrorMessage && this.state.password) {
-            this._updateRecord();
-        }
-        else {
-            // smooth keyboard animation
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-            this._checkEmail(this.state.email);
-            this._checkPassword(this.state.password);
-        }
-        
+
+    _onPress() {
+            console.log('sign up info ' , 'name ', this.state.firstName,'email ', this.state.email,'pass ' , this.state.password)
+         dismissKeyboard();
+         if (!this.state.emailErrorMessage && this.state.email && !this.state.passwordErrorMessage && this.state.password) {
+
+             return fetch('http://192.168.100.7:3100/api/user/', {
+                 method: 'POST',
+                 headers: {
+                     'Accept': 'application/json',
+                     'Content-type': 'application/json'
+                 },
+                 body: JSON.stringify(
+                     {
+                         email: this.state.email,
+                         password: this.state.password,
+                         firstName: this.state.firstName
+                     }
+                 )
+             }).then((response) => response.json())
+                 .then((responseJson) => {
+                    if(responseJson.status === 201){
+                        this._updateRecord();
+                    }
+
+                 })
+
+                 .catch((error) => {
+                     console.log(error);
+
+                 });
+
+         }
+         else {
+         // smooth keyboard animation
+         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+         this._checkEmail(this.state.email);
+         this._checkPassword(this.state.password);  console.log('sign up info2 ')
+         }
+
+
     }
-    
-    _onAnimationComplete () {
-        Actions.home();
+
+
+    _onAnimationComplete() {
+            Actions.home();
     }
-    
-    async _updateRecord () {
+
+    async _updateRecord() {
         // this.setState({isRecordUpdating: true});
         // Hint -- can make service call and check;
         // Demo
@@ -95,8 +124,8 @@ export default class SignUp extends PureComponent<void, void, State> {
             startAnimation: true
         });
     }
-    
-    _checkEmail (email) {
+
+    _checkEmail(email) {
         let errorMessage = validateEmail(email);
         if (!errorMessage) {
             this.setState({email, emailErrorMessage: null});
@@ -105,13 +134,13 @@ export default class SignUp extends PureComponent<void, void, State> {
             this.setState({email, emailErrorMessage: errorMessage});
         }
     }
-    
-    _onEmailChange (email) {
+
+    _onEmailChange(email) {
         this._checkEmail(email);
-     //   this.setState({email, emailErrorMessage: null});
+        //   this.setState({email, emailErrorMessage: null});
     }
-    
-    _checkPassword (password) {
+
+    _checkPassword(password) {
         let errorMessage = validatePassword(password);
         if (!errorMessage) {
             this.setState({password, passwordErrorMessage: null});
@@ -120,16 +149,23 @@ export default class SignUp extends PureComponent<void, void, State> {
             this.setState({password, passwordErrorMessage: errorMessage});
         }
     }
-    
-    _onPasswordChange (password) {
-          this._checkPassword(password);
-      //  this.setState({password, passwordErrorMessage: null});
+
+    _onNameChange(firstName) {
+        this.setState({firstName: firstName});
+        //  this.setState({password, passwordErrorMessage: null});
     }
+
+    _onPasswordChange(password) {
+        this._checkPassword(password);
+        //  this.setState({password, passwordErrorMessage: null});
+    }
+
     _onPressLogin() {
         Actions.login();
         // setTimeout({},1000)
     }
-    render () {
+
+    render() {
         const {
             email,
             firstName,
@@ -173,7 +209,7 @@ export default class SignUp extends PureComponent<void, void, State> {
                         style={styles.loginContainer}>
                         <GroupTextField
                             label="First Name"
-                            onChangeText={this._onEmailChange.bind(this)}
+                            onChangeText={this._onNameChange.bind(this)}
                             value={firstName}
                             warningMessage={emailErrorMessage}
                         />
@@ -181,7 +217,7 @@ export default class SignUp extends PureComponent<void, void, State> {
                             label="Email"
                             onChangeText={this._onEmailChange.bind(this)}
                             value={email}
-                             warningMessage={emailErrorMessage}
+                            warningMessage={emailErrorMessage}
                         />
                         <GroupTextField
                             label="Password"
@@ -201,9 +237,10 @@ export default class SignUp extends PureComponent<void, void, State> {
                             text="Sign In"
                             width={WINDOW_WIDTH}
                         />
-                        <View  style={styles.signUpTextView}>
+                        <View style={styles.signUpTextView}>
                             <AppText
-                                style={styles.signUpText}>You already have an account? </AppText><AppTextButton onPress={this._onPressLogin.bind(this)} style={styles.signUpText}> Login </AppTextButton>
+                                style={styles.signUpText}>You already have an account? </AppText><AppTextButton
+                            onPress={this._onPressLogin.bind(this)} style={styles.signUpText}> Login </AppTextButton>
                         </View>
                     </View>
                 </Image>
