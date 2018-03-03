@@ -48,10 +48,12 @@ export default class Login extends PureComponent<void, void, State> {
             console.log('connected')
         });
     this.state = {
-        email: 'sarah@sarah.com',
+        email: 'a@a.com',
         emailErrorMessage: null,
-        password: 'sarah123',
+        password: 'qwe123',
         passwordErrorMessage: null,
+        onCompleteFlag:0,
+        trainUserID:'',
         startAnimation: false,
         startAnimationSignUp: false,
         isRecordUpdating: false,
@@ -81,8 +83,10 @@ export default class Login extends PureComponent<void, void, State> {
     _onPress () {
         dismissKeyboard();
         if (!this.state.emailErrorMessage && this.state.email && !this.state.passwordErrorMessage && this.state.password) {
-
-            return fetch('http://192.168.100.7:3100/api/user/login', {
+            this.setState({
+                startAnimation: true
+            });
+            return fetch('http://192.168.100.4:3100/api/user/login', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -102,7 +106,7 @@ export default class Login extends PureComponent<void, void, State> {
                             this._fetchUserAddons();
                         }
                         else{
-                            this._trainUser(global.userInfo.userId);
+                            this._trainUser(global.userInfo.userId  );
                         }
 
 
@@ -125,34 +129,43 @@ export default class Login extends PureComponent<void, void, State> {
 
     _trainUser(userID){
         console.log("hello from train" , userID)
+        this.setState({
+            startAnimation: true,
+            onCompleteFlag:2,
+            trainUserID:userID,
+        });
 
-
-        this.socket.emit('start_training', {"data":{"userId":userID}} );
+        /*this.socket.emit('start_training', {"data":{"userId":userID}} );
 
         this.socket.on('finished_training',  (userData) => {
-            console.log('complete training', userData)
+            console.log('complete training', userData)*/
             /*   if(userData.data.userId === global.userInfo.userID){
              this._fetchUserAddons();
-             }*/
+             }
 
-        });
+        });*/
     }
 
+
     _fetchUserAddons(){
-        return fetch('http://192.168.100.7:3100/api/addons/:userId', {
+        const params = {userId: global.userInfo.userId};
+        let url = `http://192.168.100.4:3100/api/addons/:userId${encodeURIComponent(params.userId)}`;
+        console.log('Addons' );
+        return fetch(url , {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-type': 'application/json'
             },
-        })   .then((response) => response.json())
-            .then((responseJson) => {
-                console.log('user addons are  ' +  JSON.stringify(responseJson))
-                if(responseJson.status === 200){
-                    global.userAddons=responseJson;
+        })              .then((response) => {
+                console.log('user addons are  ' +  JSON.stringify(response))
+                    global.userAddons=response;
+            console.log('response', response.status )
+                if(response.status === 200){
+                    console.log('Addons', response )
                     this._updateRecord();
-                }
 
+                }
             })
 
             .catch((error) => {
@@ -163,7 +176,16 @@ export default class Login extends PureComponent<void, void, State> {
 
 
     _onAnimationComplete () {
-        Actions.home();
+        if(this.state.onCompleteFlag ===1)
+        {
+            Actions.home();
+        }else if(this.state.onCompleteFlag ===2)
+        {
+            //Actions.TrainContainer({userID: this.state.trainUserID})
+           // Actions.AppIntroContainer({userID: this.state.trainUserID})
+           Actions.home();
+        }
+
     }
     _onPressSignUp () {
         Actions.signUp();
@@ -175,7 +197,8 @@ export default class Login extends PureComponent<void, void, State> {
         // Demo
         // this.setState({isRecordUpdating: false});
         this.setState({
-            startAnimation: true
+            startAnimation: true,
+            onCompleteFlag:1,
         });
     }
     

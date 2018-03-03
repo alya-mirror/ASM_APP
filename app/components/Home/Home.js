@@ -121,6 +121,8 @@ export default class Home extends PureComponent<void, Props, State> {
             candidates: [],
             sortable: false,
             longChecked: true,
+            longPressAddonsButtonStatus:1,
+            longPressAddonsButtonIcon:'md-add',
             longCheckedPop: false,
             searchTerm: '',
             searchTermPop: '',
@@ -246,8 +248,12 @@ export default class Home extends PureComponent<void, Props, State> {
         try {
             if (this.state.longPressActivatedForManaging === false) {
                 this._onPressManagementButton();
-                this.setState({longChecked: false});
-                this.setState({longCheckedPop: true});
+                this.setState({longChecked: false,
+                    longCheckedPop: true,
+                    longPressAddonsButtonStatus:2,
+                    longPressAddonsButtonIcon:'md-checkmark-circle',
+
+                });
             }
             else if (this.state.longPressActivatedForManaging === true) {
             }
@@ -408,13 +414,23 @@ export default class Home extends PureComponent<void, Props, State> {
         /*   this.setState({
                 startAnimation: true
             });*/
-        this.popupDialog.show();
+        if(this.state.longPressAddonsButtonStatus === 1){
+            this.popupDialog.show();
+        }else if(this.state.longPressAddonsButtonStatus ===2)
+        {
+            this.setState({longChecked: true,
+                longCheckedPop: false,
+                longPressAddonsButtonStatus:1,
+                longPressAddonsButtonIcon:'md-add',
+
+            });
+            this._onPressManagementButton();
+        }
+
     }
 
     _onPressComplete() {
-        this.setState({longChecked: true});
-        this.setState({longCheckedPop: false});
-        this._onPressManagementButton();
+
     }
 
     render() {
@@ -422,8 +438,18 @@ export default class Home extends PureComponent<void, Props, State> {
         const dataGridSource = filteredDataList;
         const filteredDataListPop = this.state.candidates.filter(createFilter(this.state.searchTermPop, KEYS_TO_FILTERS));
         const dataGridSourceCandidates = filteredDataListPop;
+        const {
+            longPressAddonsButtonIcon,
+            startAnimation,
+        } = this.state;
         return (
             <View style={styles.homeContainer}>
+                <StatusBar
+                    animated
+                    backgroundColor={Colors.primaryDark}
+                    barStyle="light-content"
+                    // translucent
+                />
                 <View style={styles.homeComponentHolder}>
                     {/*<Text style={{fontWeight: 'bold', marginTop: 10, color:'#000', fontSize:10}}>Custom animation</Text>
                     */}
@@ -447,40 +473,11 @@ export default class Home extends PureComponent<void, Props, State> {
                                 rowHeight={80}
                                 dataSource={this.state.dataSource}
                                 renderCell={this._renderGridCell}
-                                sortable={this.state.sortable}
+                                sortable={false}
+                                //sortable={this.state.sortable}
                             />
                         </ScrollView>
                     </View>
-                    {this.state.longChecked === true ? (
-                        <Fab
-                            //duration={1000}
-                            onComplete={this._onAnimationComplete.bind(this)}
-                            onPress={this._onPress.bind(this)}
-                            rippleColor={Colors.fadedWhite}
-                            startAnimation={this.state.startAnimation}
-                            style={styles.fabButton}
-                            width={50}
-                        >
-                            <Icons
-                                color={Colors.white}
-                                name="md-add"
-                                size={24}
-                            />
-                        </Fab>) : (<Fab
-                        //  duration={1000}
-                        onComplete={this._onAnimationComplete.bind(this)}
-                        onPress={this._onPressComplete.bind(this)}
-                        rippleColor={Colors.fadedWhite}
-                        startAnimation={this.state.startAnimation}
-                        style={styles.fabButton}
-                        width={50}
-                    >
-                        <Icons
-                            color={Colors.white}
-                            name="md-checkmark-circle"
-                            size={24}
-                        />
-                    </Fab>)}
 
                     <PopupDialog
                         dialogTitle={
@@ -511,6 +508,7 @@ export default class Home extends PureComponent<void, Props, State> {
                                         borderRadius: 30,
                                         position: 'relative',
                                     }}
+                                    rowHeight={80}
                                     columnCount={4}
                                     dataSource={this.state.candidates}
                                     renderCell={this._renderCandidateCell}
@@ -519,6 +517,21 @@ export default class Home extends PureComponent<void, Props, State> {
                             </ScrollView>
                         </View>
                     </PopupDialog>
+                    <Fab
+                        //duration={1000}
+                        onComplete={this._onAnimationComplete.bind(this)}
+                        onPress={this._onPress.bind(this)}
+                        rippleColor={Colors.fadedWhite}
+                        startAnimation={startAnimation}
+                        style={styles.fabButton}
+                        width={50}
+                    >
+                        <Icons
+                            color={Colors.white}
+                            name={longPressAddonsButtonIcon}
+                            size={24}
+                        />
+                    </Fab>
                 </View>
             </View>
         );
