@@ -86,7 +86,7 @@ export  const searchBox = StyleSheet.create({
         color: 'rgba(0,0,0,0.5)'
     },
     searchInput:{
-        marginTop:'10%',
+        marginTop:'7%',
         padding: 10,
         //flex:1,
         borderRadius:40,

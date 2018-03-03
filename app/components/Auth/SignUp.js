@@ -4,7 +4,7 @@ import {Actions} from 'react-native-router-flux';
 import SmartScrollView from 'react-native-smart-scroll-view';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import styles from './styles';
-import {RectangularButton} from '../AnimatedButton';
+import {RectangularButton,TrainingRectangularButton} from '../AnimatedButton';
 import AnimatedLogo from '../AnimatedLogo';
 import Colors from '../../utils/Colors';
 import GroupTextField from '../Core/GroupTextField';
@@ -39,12 +39,13 @@ const {width: WINDOW_WIDTH} = Dimensions.get('window');
 
 export default class SignUp extends PureComponent<void, void, State> {
     state: State = {
-        firstName: '',
-        email: '',
+        firstName: 'ibrahim',
+        email: 'a@a.com',
         emailErrorMessage: null,
-        password: '',
+        password: 'qwe123',
         passwordErrorMessage: null,
         startAnimation: false,
+        completeActionTraining:false,
         isRecordUpdating: false,
         hideWelcomeMessage: false,
     };
@@ -70,10 +71,13 @@ export default class SignUp extends PureComponent<void, void, State> {
 
     _onPress() {
             console.log('sign up info ' , 'name ', this.state.firstName,'email ', this.state.email,'pass ' , this.state.password)
+        this.setState({
+            startAnimation: true,
+        });
          dismissKeyboard();
          if (!this.state.emailErrorMessage && this.state.email && !this.state.passwordErrorMessage && this.state.password) {
 
-             return fetch('http://192.168.100.7:3100/api/user/', {
+             return fetch('http://192.168.100.4:3100/api/user/', {
                  method: 'POST',
                  headers: {
                      'Accept': 'application/json',
@@ -86,17 +90,16 @@ export default class SignUp extends PureComponent<void, void, State> {
                          firstName: this.state.firstName
                      }
                  )
-             }).then((response) => response.json())
-                 .then((responseJson) => {
-                    if(responseJson.status === 201){
-                        this._updateRecord();
-                    }
+             })
+                 .then((response) => {
+                    // this._updateRecord();
+                        console.log('done ',response);
+                     this._updateRecord()
 
                  })
 
                  .catch((error) => {
                      console.log(error);
-
                  });
 
          }
@@ -121,8 +124,10 @@ export default class SignUp extends PureComponent<void, void, State> {
         // Demo
         // this.setState({isRecordUpdating: false});
         this.setState({
-            startAnimation: true
+            completeActionTraining:true
         });
+
+
     }
 
     _checkEmail(email) {
@@ -172,6 +177,7 @@ export default class SignUp extends PureComponent<void, void, State> {
             emailErrorMessage,
             passwordErrorMessage,
             password,
+            completeActionTraining,
             startAnimation,
             isRecordUpdating,
             hideWelcomeMessage
@@ -226,15 +232,16 @@ export default class SignUp extends PureComponent<void, void, State> {
                             value={password}
                             warningMessage={passwordErrorMessage}
                         />
-                        <RectangularButton
-                            duration={1000}
+                        <TrainingRectangularButton
+                            duration={800}
                             fontColor="#FFF"
                             formCircle={true}
                             onComplete={this._onAnimationComplete.bind(this)}
                             onPress={this._onPress.bind(this)}
                             spinner={isRecordUpdating}
                             startAnimation={startAnimation}
-                            text="Sign In"
+                            text="Sign Up"
+                            completeActionTraining={completeActionTraining}
                             width={WINDOW_WIDTH}
                         />
                         <View style={styles.signUpTextView}>

@@ -15,6 +15,10 @@ import Colors from '../../utils/Colors';
 import {RectangularButton , TrainingRectangularButton} from '../AnimatedButton';
 import dismissKeyboard from "react-native-dismiss-keyboard";
 import {validateEmail, validatePassword} from "../../lib/validator";
+
+const io = require('socket.io-client');
+
+
 type State = {
     startAnimation: boolean,
 }
@@ -41,6 +45,13 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
 
     constructor(props) {
         super(props);
+       // this.url = 'http://192.168.100.4:3100';
+       // this.socket = io.connect('http://192.168.100.4:3100');
+       this.socket = new io.connect('http://192.168.100.4:3100', {
+            transports: ['websocket'] // you need to explicitly tell it to use websockets
+        });
+        this.socket.on('connect', () => {
+            console.log("socket connected")});
         this.displayName = 'DragDropTest';
         this.numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
         this.state = {
@@ -66,13 +77,36 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
             },
         };
         this._sortableSudokuGrid = null
+        this._updateRecord = this._updateRecord.bind(this);
     }
 
     componentDidMount() {
         try {
+            setTimeout(()=> { this.setState({
+                startAnimation: true,
+                completeActionTraining:false
+            });
+            },2000);
 
-           // var contextTest = new Map();
+            this.socket.on('connect', () => {
+                console.log("socket connected in train", this.props.userID);
+                this.socket.emit("start_training",JSON.stringify({"data": {"userId": this.props.userID}}))
+                this.socket.on('finished_training', (userData) => {
+                    console.log('complete training', userData);
+                    if(userData.data.userId === this.props.userID){
+                        this._fetchUserAddons();
+                    }
 
+                });
+            });
+
+            this.socket.on('connect_error', (err) => {
+                console.log(err)
+            });
+
+            this.socket.on('disconnect', () => {
+                console.log("Disconnected Socket!")
+            })
 
         }
         catch (error) {
@@ -90,21 +124,35 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
     }
 
 
-    async _updateRecord () {
+    _fetchUserAddons(){
+        return fetch('http://192.168.100.4:3100/api/addons/:userId', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json'
+            },
+        })   .then((response) => response.json())
+            .then((responseJson) => {
+                console.log('user addons are  ' +  JSON.stringify(responseJson))
+                if(responseJson.status === 200){
+                    global.userAddons=responseJson;
+                    //  this._updateRecord();
+                }
+
+            })
+
+            .catch((error) => {
+                console.log(error);
+
+            });
+    }
+
+     _updateRecord (userID) {
         // this.setState({isRecordUpdating: true});
         // Hint -- can make service call and check;
         // Demo
         // this.setState({isRecordUpdating: false});
-      this.setState({
-            startAnimation: true,
-          completeActionTraining:false
-        });
 
-      setTimeout(()=>{
-          this.setState({
-          completeActionTraining:true
-      });
-      },5000)
     }
 
     _checkEmail (email) {
@@ -153,7 +201,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
                             A l y a   S m a r t   M i r r o r
                         </Text>
                         <Text  style={TrainingScreenStyle.startingText}>
-                            Please Click on the button blew and the stand in front of Alya Smart Mirror so it can recognize you, when this process is done this window will
+                            {global.userInfo.firstName} Please stand in front of Alya Smart Mirror so it can recognize you, when this process is done this window will
                             disappear!
                         </Text>
                     </View>

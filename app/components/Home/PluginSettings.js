@@ -31,7 +31,6 @@ export default class PluginSettings extends PureComponent<void, Props, State> {
         this.state = {
             startAnimation: false,
             animation: new Animated.Value(0),
-            dataSource: [...dataList],
             candidates: [],
             sortable: false,
             longChecked: true,

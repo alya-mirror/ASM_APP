@@ -6,6 +6,7 @@ import {Actions, Router, Scene} from 'react-native-router-flux';
 import HomeContainer from '../components/Home/HomeContainer';
 import PluginSetting from '../components/Home/PluginSettings';
 import LoginContainer from '../components/Auth/LoginContainer';
+import AppIntroContainer from '../components/AppIntro/AppIntroContainer'
 import TrainContainer from '../components/Auth/TrainContainer';
 import SignUpContainer from '../components/Auth/SignUpContainer';
 import NavigationDrawer from '../components/NavigationDrawer';
@@ -176,11 +177,20 @@ export default class AppRouter extends PureComponent {
                             type="reset"
                         />
                         <Scene
-                            component={TrainContainer}
+                        component={TrainContainer}
+                        duration={0}
+                        hideNavBar
+                        isDrawerEnable={false}
+                        key="TrainContainer"
+                        title="TrainContainer"
+                        type="reset"
+                    />
+                        <Scene
+                            component={AppIntroContainer}
                             duration={0}
                             hideNavBar
                             isDrawerEnable={false}
-                            key="TrainContainer"
+                            key="AppIntroContainer"
                             title="TrainContainer"
                             type="reset"
                         />
