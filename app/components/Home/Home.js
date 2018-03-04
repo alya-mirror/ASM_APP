@@ -68,13 +68,15 @@ export default class Home extends PureComponent<void, Props, State> {
 
     constructor(props) {
         super(props);
+        console.log('user installed addons ' , global.userAddons)
+        console.log('user approved addons ' , global.approvedAddons)
         this.displayName = 'DragDropTest';
         this.numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
         this.state = {
             startAnimation: false,
             animation: new Animated.Value(0),
-            dataSource: [...dataList],
-            candidates: [],
+            dataSource: global.userAddons,
+            candidates: global.approvedAddons,
             sortable: false,
             longChecked: true,
             longPressAddonsButtonStatus:1,
@@ -127,9 +129,9 @@ export default class Home extends PureComponent<void, Props, State> {
                         overflow: 'hidden',
                         justifyContent: 'center', alignItems: 'center', flex: 1,
                     }}>
-                        <Image source={data.icon}
+                        <Image source={data[2]}
                                style={{width: 50, height: 50, marginHorizontal: 5, marginBottom: 5,}}/>
-                        <Text>{data.title}</Text>
+                        <Text>{data[1]}</Text>
                     </View>
                     <TouchableOpacity
                         disabled={!this.state.disabled}
@@ -232,9 +234,9 @@ export default class Home extends PureComponent<void, Props, State> {
                         overflow: 'hidden', backgroundColor: "transparent",
                         justifyContent: 'center', alignItems: 'center', flex: 1,
                     }}>
-                        <Image source={data.icon}
+                        <Image source={data[2]}
                                style={{width: 45, height: 45, marginHorizontal: 10, marginBottom: 5,}}/>
-                        <Text style={{fontSize:12,}}>{data.title}</Text>
+                        <Text style={{fontSize:12,}}>{data[1]}</Text>
                     </View>
                     <TouchableOpacity
                         disabled={!this.state.disabled}
@@ -272,11 +274,11 @@ export default class Home extends PureComponent<void, Props, State> {
         )
     };
     _onPressCell = (data) => {
-        Alert.alert('Long press to manage ' + data.title)
+        Alert.alert('Long press to manage ' + data[1])
     };
 
     _onPressCandidateCell = (data) => {
-        Alert.alert('Long press to Install ' + data.title)
+        Alert.alert('Long press to Install ' + data[1])
     };
 
     _onPressManagementButton = () => {
@@ -321,6 +323,27 @@ export default class Home extends PureComponent<void, Props, State> {
                 }
             }
         })
+
+        return fetch(`http://192.168.100.4:3100/api/userAddons/:${encodeURIComponent(component.props.data[0])}`, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-type': 'application/json'
+            },
+          
+        })
+            .then((response) => {
+                console.log('unInstall' +  JSON.stringify(response))
+
+
+
+            })
+
+            .catch((error) => {
+                console.log(error);
+
+            });
+
     };
     _onSettingCellButtonPress = (component, data) => {
         let cellIndex = this._sortableSudokuGrid._cells.findIndex((cell) => {
@@ -328,7 +351,7 @@ export default class Home extends PureComponent<void, Props, State> {
         });
         //console.log(`_onRemoveCellButtonPress cellIndex = ${cellIndex}`)
         // Alert.alert('clicked grid cell -> ' + data.title)
-        Actions.PluginSetting({text: data.title});
+        Actions.PluginSetting({text: data[1]});
         this._sortableSudokuGrid.removeCell({
             cellIndex,
             callback: (removedDataList) => {
@@ -345,6 +368,7 @@ export default class Home extends PureComponent<void, Props, State> {
         })
     };
     _onRemoveCandidatesCellButtonPress = (component) => {
+        console.log('_onRemoveCandidatesCellButtonPress cellIndex',component.props.data);
         let cellIndex = this._candidatesSudokuGrid._cells.findIndex((cell) => {
             return cell.component === component
         })
@@ -364,6 +388,32 @@ export default class Home extends PureComponent<void, Props, State> {
                 }
             }
         })
+
+        return fetch('http://192.168.100.4:3100/api/userAddons/', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    userId: global.userInfo.userId,
+                    addonId: component.props.data[0],
+                }
+            )
+        })
+            .then((response) => {
+                console.log('install' +  JSON.stringify(response))
+
+
+
+            })
+
+            .catch((error) => {
+                console.log(error);
+
+            });
+
     };
 
     _onPress() {
@@ -390,6 +440,7 @@ export default class Home extends PureComponent<void, Props, State> {
     }
 
     render() {
+        console.log('render lists',  global.userAddons ,  global.approvedAddons)
         const filteredDataList = this.state.dataSource.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
         const dataGridSource = filteredDataList;
         const filteredDataListPop = this.state.candidates.filter(createFilter(this.state.searchTermPop, KEYS_TO_FILTERS));

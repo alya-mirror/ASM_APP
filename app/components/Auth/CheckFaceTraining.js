@@ -15,6 +15,9 @@ import Colors from '../../utils/Colors';
 import {RectangularButton , TrainingRectangularButton} from '../AnimatedButton';
 import dismissKeyboard from "react-native-dismiss-keyboard";
 import {validateEmail, validatePassword} from "../../lib/validator";
+import image_youtube from '../Home/images/youtube.png'
+import image_time from '../Home/images/time.png'
+import image_calendar from '../Home/images/calendar.png'
 
 const io = require('socket.io-client');
 
@@ -120,6 +123,10 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
 
 
     _fetchUserAddons(){
+        let userAddons = new Array();
+        let approvedAddons = new Array();
+        let addonName='';
+        let iconName='';
         return fetch(`http://192.168.100.4:3100/api/addons/:${encodeURIComponent(global.userInfo.userId)}`, {
             method: 'GET',
             headers: {
@@ -129,10 +136,46 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
         }).then((response) => response.json())
             .then((responseJson) => {
                 console.log('user addons after train is  ' +  JSON.stringify(responseJson))
+                for(let addon of responseJson.userInstalledAddons ){
+                    if(addon.description.toString().indexOf('clock')>-1){
+                       addonName='Clock'
+                        iconName=image_time;
+                    }
+                    else if(addon.description.toString().indexOf('youtube')>-1){
+                        addonName='Youtube'
+                        iconName=image_youtube;
+                    }else if(addon.description.toString().indexOf('date/time')>-1){
+                        addonName='Date Time'
+                        iconName=image_calendar;
+                    }
+                    userAddons.push([addon._id ,addonName ,iconName ,addon.npm_name])
+                    addonName=''
+                    iconName='';
+                }
+
+                for(let addon of responseJson.allApprovedUninstalledAddons ){
+                    addonName=''
+                    iconName='';
+                    if(addon.description.toString().indexOf('clock')>-1){
+                        addonName='Clock'
+                        iconName=image_time;
+                    }
+                    else if(addon.description.toString().indexOf('youtube')>-1){
+                        addonName='Youtube'
+                        iconName=image_youtube;
+                    }else if(addon.description.toString().indexOf('date/time')>-1){
+                        addonName='Date Time'
+                        iconName=image_calendar;
+                    }
+                    approvedAddons.push([addon._id ,addonName ,iconName ,addon.npm_name])
+
+                }
+                global.userAddons= userAddons;
+                global.approvedAddons = approvedAddons;
                 setTimeout(()=> {  this.setState({
                     completeActionTraining:true,
                 });
-                },3000);
+                },4000);
 
             })
 
