@@ -21,9 +21,9 @@ import Icons from '../Core/FontAwesomeIcons';
 import SearchInput, {createFilter} from 'react-native-search-filter';
 import {SortableSudokuGrid} from '../components'
 import {DragContainer, Draggable, DropZone} from './index'
-import image_cash from './images/cash.png'
-import image_credit from './images/credit.png'
-import image_transfer from './images/transfer.png'
+import image_youtube from './images/youtube.png'
+import image_time from './images/time.png'
+import image_calendar from './images/calendar.png'
 import image_loan from './images/loan.png'
 import image_charge from './images/charge.png'
 import image_payment from './images/payment.png'
@@ -38,62 +38,18 @@ import image_locked from './images/locked.png'
 const KEYS_TO_FILTERS = ['title'];
 const dataList = [
     {
-        icon: image_cash,
-        title: 'cash',
+        icon: image_youtube,
+        title: 'YouTube',
     },
     {
-        icon: image_credit,
-        title: 'credit',
-    },
-    {
-        icon: image_transfer,
-        title: 'transfer',
-    },
-    {
-        icon: image_loan,
-        title: 'loan',
-    },
-    {
-        icon: image_charge,
-        title: 'charge',
-    },
-    {
-        icon: image_payment,
-        title: 'pay',
-    },
-    {
-        icon: image_shopping,
-        title: 'shop',
-    },
-    {
-        icon: image_service,
-        title: 'service',
-    }, {
-        icon: image_donate,
-        title: 'donate',
-    }, {
-        icon: image_donate,
+        icon: image_time,
         title: 'Clock',
-    }, {
-        icon: image_donate,
-        title: 'Amazon',
-    }, {
-        icon: image_donate,
-        title: '3',
-    }, {
-        icon: image_donate,
-        title: '4',
     },
     {
-        icon: image_donate,
-        title: '5',
-    }, {
-        icon: image_donate,
-        title: '6',
-    }, {
-        icon: image_donate,
-        title: '7',
-    },
+        icon: image_calendar,
+        title: 'Date Time',
+    }
+
 ];
 
 const columnCount = 3;
@@ -166,13 +122,13 @@ export default class Home extends PureComponent<void, Props, State> {
                 underlayColor={"#fff"}
                 style={{width: 75, height: 75, padding: 1, position: 'relative', borderRadius: 60,}}
                 onPress={this._onPressCell.bind(this, data)}>
-                <View style={{flex: 1, padding: 1, position: 'relative', backgroundColor: "#fff", borderRadius: 60,}}>
+                <View style={{flex: 1, padding: 1, position: 'relative', backgroundColor: "transparent", borderRadius: 60,}}>
                     <View style={{
                         overflow: 'hidden',
                         justifyContent: 'center', alignItems: 'center', flex: 1,
                     }}>
                         <Image source={data.icon}
-                               style={{width: 30, height: 30, marginHorizontal: 5, marginBottom: 5,}}/>
+                               style={{width: 50, height: 50, marginHorizontal: 5, marginBottom: 5,}}/>
                         <Text>{data.title}</Text>
                     </View>
                     <TouchableOpacity
@@ -269,16 +225,16 @@ export default class Home extends PureComponent<void, Props, State> {
                 onLongPress={() => this._activateEditPluginsOptions()}
                 disabled={this.state.disabled}
                 underlayColor={"#fff"}
-                style={{width: 70, height: 70, padding: 1, position: 'relative', borderRadius: 20,}}
+                style={{width: 70, height: 70, padding: 1, position: 'relative', borderRadius: 60,backgroundColor: "transparent"}}
                 onPress={this._onPressCandidateCell.bind(this, data)}>
-                <View style={{flex: 1, padding: 1, position: 'relative', backgroundColor: "#fff"}}>
+                <View style={{flex: 1, padding: 1, position: 'relative', backgroundColor: "transparent"}}>
                     <View style={{
-                        overflow: 'hidden', backgroundColor: '#fff',
+                        overflow: 'hidden', backgroundColor: "transparent",
                         justifyContent: 'center', alignItems: 'center', flex: 1,
                     }}>
                         <Image source={data.icon}
-                               style={{width: 30, height: 30, marginHorizontal: 10, marginBottom: 10,}}/>
-                        <Text>{data.title}</Text>
+                               style={{width: 45, height: 45, marginHorizontal: 10, marginBottom: 5,}}/>
+                        <Text style={{fontSize:12,}}>{data.title}</Text>
                     </View>
                     <TouchableOpacity
                         disabled={!this.state.disabled}
@@ -316,11 +272,11 @@ export default class Home extends PureComponent<void, Props, State> {
         )
     };
     _onPressCell = (data) => {
-        Alert.alert('clicked grid cell -> ' + data.title)
+        Alert.alert('Long press to manage ' + data.title)
     };
 
     _onPressCandidateCell = (data) => {
-        Alert.alert('clicked candidate cell -> ' + data.title)
+        Alert.alert('Long press to Install ' + data.title)
     };
 
     _onPressManagementButton = () => {
@@ -459,11 +415,11 @@ export default class Home extends PureComponent<void, Props, State> {
                             this.searchUpdated(term)
                         }}
                         style={searchBox.searchInput}
-                        placeholder="Type a message to search"
+                        placeholder="Search your add-ons"
                     />
                     <View
                         //scrollEnabled={this.state.scrollEnabled}
-                        style={{marginTop: 15, backgroundColor: 'transparent', alignItems: 'center',}}>
+                        style={{marginTop: 30, backgroundColor: 'transparent', alignItems: 'center',}}>
                         <ScrollView showsVerticalScrollIndicator={false}>
                             <SortableSudokuGrid
                                 ref={component => this._sortableSudokuGrid = component}
@@ -487,12 +443,12 @@ export default class Home extends PureComponent<void, Props, State> {
                                     this.searchUpdatedPop(term)
                                 }}
                                 style={searchBox.searchInputPop}
-                                placeholder="Search"
+                                placeholder="Search for new add-ons"
                             />}
-                        dialogStyle={{borderRadius: 50}}
+                        dialogStyle={{borderRadius: 40 , backgroundColor: '#e5e5dd'}}
                         dialogAnimation={'FadeAnimation'}
                         width={'80%'}
-                        height={350}
+                        height={300}
                         ref={(fadeAnimationDialog) => {
                             this.popupDialog = fadeAnimationDialog;
                         }}
@@ -508,7 +464,7 @@ export default class Home extends PureComponent<void, Props, State> {
                                         borderRadius: 30,
                                         position: 'relative',
                                     }}
-                                    rowHeight={80}
+                                    rowHeight={100}
                                     columnCount={4}
                                     dataSource={this.state.candidates}
                                     renderCell={this._renderCandidateCell}

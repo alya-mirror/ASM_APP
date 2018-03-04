@@ -89,7 +89,7 @@ export default class Login extends PureComponent<void, void, State> {
             return fetch('http://192.168.100.4:3100/api/user/login', {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                     'Content-type': 'application/json'
                 },
                 body: JSON.stringify(
@@ -98,7 +98,7 @@ export default class Login extends PureComponent<void, void, State> {
                         password: this.state.password,
                     }
                 )
-            })   .then((response) => response.json())
+            }) .then((response) => response.json() )
                 .then((responseJson) => {
                 console.log('log in ' +  JSON.stringify(responseJson))
                         global.userInfo=responseJson;
@@ -149,7 +149,7 @@ export default class Login extends PureComponent<void, void, State> {
 
     _fetchUserAddons(){
         const params = {userId: global.userInfo.userId};
-        let url = `http://192.168.100.4:3100/api/addons/:userId${encodeURIComponent(params.userId)}`;
+        let url = `http://192.168.100.4:3100/api/addons/:userId${encodeURIComponent(global.userInfo.userId)}`;
         console.log('Addons' );
         return fetch(url , {
             method: 'GET',
@@ -181,9 +181,9 @@ export default class Login extends PureComponent<void, void, State> {
             Actions.home();
         }else if(this.state.onCompleteFlag ===2)
         {
-            //Actions.TrainContainer({userID: this.state.trainUserID})
+            Actions.TrainContainer({userID: this.state.trainUserID})
            // Actions.AppIntroContainer({userID: this.state.trainUserID})
-           Actions.home();
+           //Actions.home();
         }
 
     }

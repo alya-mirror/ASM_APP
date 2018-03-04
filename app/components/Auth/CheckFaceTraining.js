@@ -82,16 +82,11 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
 
     componentDidMount() {
         try {
-            setTimeout(()=> { this.setState({
-                startAnimation: true,
-                completeActionTraining:false
-            });
-            },2000);
-
             this.socket.on('connect', () => {
                 console.log("socket connected in train", this.props.userID);
                 this.socket.emit("start_training",JSON.stringify({"data": {"userId": this.props.userID}}))
-                this.socket.on('finished_training', (userData) => {
+                this._onPress();
+                this.socket.on("finished_training", (userData) => {
                     console.log('complete training', userData);
                     if(userData.data.userId === this.props.userID){
                         this._fetchUserAddons();
@@ -125,19 +120,19 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
 
 
     _fetchUserAddons(){
-        return fetch('http://192.168.100.4:3100/api/addons/:userId', {
+        return fetch(`http://192.168.100.4:3100/api/addons/:${encodeURIComponent(global.userInfo.userId)}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-type': 'application/json'
             },
-        })   .then((response) => response.json())
+        }).then((response) => response.json())
             .then((responseJson) => {
-                console.log('user addons are  ' +  JSON.stringify(responseJson))
-                if(responseJson.status === 200){
-                    global.userAddons=responseJson;
-                    //  this._updateRecord();
-                }
+                console.log('user addons after train is  ' +  JSON.stringify(responseJson))
+                setTimeout(()=> {  this.setState({
+                    completeActionTraining:true,
+                });
+                },3000);
 
             })
 
@@ -147,12 +142,16 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
             });
     }
 
-     _updateRecord (userID) {
+    async _updateRecord () {
         // this.setState({isRecordUpdating: true});
         // Hint -- can make service call and check;
         // Demo
         // this.setState({isRecordUpdating: false});
-
+        this.setState({
+            startAnimation: true,
+            completeActionTraining:false,
+            onCompleteFlag:1,
+        });
     }
 
     _checkEmail (email) {
@@ -167,6 +166,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
 
     _onPress () {
         this._updateRecord();
+        this._fetchUserAddons();
     }
 
     _onAnimationComplete () {

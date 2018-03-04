@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     },
     profileContainer: {
         height: 100,
-        backgroundColor: Colors.fadedLightBlack,
+        backgroundColor: Colors.fadedLightPri,
         paddingLeft: 30,
         paddingTop: 10
     },
