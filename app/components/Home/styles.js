@@ -64,11 +64,11 @@ export const styles = StyleSheet.create({
     },
     pluginContainerStyle:{
       flex:1,
-        marginTop:5,
+        marginTop:3,
         marginBottom:5,
-        borderRadius: 20,
+        borderRadius: 40,
         position:'relative',
-       // backgroundColor: '#8aff7b',
+        backgroundColor: '#e5e5dd',
     },
 });
 export  const searchBox = StyleSheet.create({

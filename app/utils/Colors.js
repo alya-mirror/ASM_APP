@@ -17,6 +17,7 @@ module.exports = {
     'fadedWhite1': 'rgba(255, 255, 255, .35)',
     'fadedBlack': 'rgba(0, 0, 0, .5)',
     'fadedLightBlack': 'rgba(0, 0, 0, .2)',
+    'fadedLightPri': 'rgba(89, 31, 55, .6)',
     'separator': 'rgba(0, 0, 0, .08)',
     'transparent': 'transparent',
     'pressColor': 'rgba(255, 255, 255, .15)',
