@@ -12,6 +12,7 @@ const {height: WINDOW_HEIGHT} = Dimensions.get('window');
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
+        backgroundColor:'#fff'
     },
     imageContainer: {
         flex: 1,
@@ -19,10 +20,18 @@ const styles = StyleSheet.create({
         width: null,
         height: null,
         justifyContent: 'space-between',
-        resizeMode: 'cover'
+        //resizeMode: 'cover'
     },
     logoContainer: {
         flex: 1,
+        position: 'relative',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    logoContainerTrain: {
+        flex: 1,
+        top:172,
+        right:5,
         position: 'relative',
         alignItems: 'center',
         justifyContent: 'center'
@@ -35,7 +44,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.transparent
     },
     loginContainer: {
-        backgroundColor: 'rgba(000, 000, 000, .2)',
+        backgroundColor: 'rgba(000, 000, 000, 0.2)',
         paddingBottom: 20,
         flexDirection: 'column',
         paddingLeft: "10%",
@@ -53,19 +62,22 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     }
 });
-export const TrainingScreenStyle = StyleSheet.create({
+export const  TrainingScreenStyle = StyleSheet.create({
     container:
         {
             //flex: 1,
-            width: '100%',
-            height:200,
+            width: Dimensions.get('window').width ,
+            height:210,
             padding:'10%',
             marginTop:'35%',
-            left:30,
+            alignItems:'center',
+            textAlign:'left',
+            // backgroundColor:Colors.primary,
 
         },
     welcomeText:
         {
+            marginTop:50,
             fontSize: 30,
             fontWeight: '600',
             color:Colors.primary,
@@ -73,9 +85,9 @@ export const TrainingScreenStyle = StyleSheet.create({
     subTitleWelcomeText:
         {
             paddingTop:0,
-            fontSize: 13,
+            fontSize: 12,
             fontWeight: '600',
-            color:Colors.white,
+            color:Colors.primary,
         },
     startingText:
         {

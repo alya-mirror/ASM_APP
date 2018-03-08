@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     validationError: {
         textAlign: 'right',
         marginRight: 10,
-        color: Colors.white,
+        color: Colors.primary,
         marginBottom: 10
     }
 });
@@ -116,7 +116,7 @@ export default class GroupTextField extends PureComponent<Props, Props, State> {
     };
     
     static defaultProps: Props = {
-        highlightColor: Colors.fadedWhite,
+        highlightColor: Colors.white,
         keyboardType: 'default',
         secureTextEntry: false,
         duration: 200,
@@ -124,7 +124,7 @@ export default class GroupTextField extends PureComponent<Props, Props, State> {
         iconSize: 24,
         isDivider: true,
         dense: true,
-        labelColor: Colors.fadedWhite,
+        labelColor: Colors.white,
         textColor: Colors.white
     };
     
