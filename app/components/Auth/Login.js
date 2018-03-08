@@ -86,7 +86,7 @@ export default class Login extends PureComponent<void, void, State> {
             this.setState({
                 startAnimation: true
             });
-            return fetch('http://192.168.100.4:3100/api/user/login', {
+            return fetch('http://192.168.0.10:3100/api/user/login', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -149,7 +149,7 @@ export default class Login extends PureComponent<void, void, State> {
 
     _fetchUserAddons(){
         const params = {userId: global.userInfo.userId};
-        let url = `http://192.168.100.4:3100/api/addons/:userId${encodeURIComponent(global.userInfo.userId)}`;
+        let url = `http://192.168.0.10:3100/api/addons/:userId${encodeURIComponent(global.userInfo.userId)}`;
         console.log('Addons' );
         return fetch(url , {
             method: 'GET',
@@ -181,8 +181,8 @@ export default class Login extends PureComponent<void, void, State> {
             Actions.home();
         }else if(this.state.onCompleteFlag ===2)
         {
-            Actions.TrainContainer({userID: this.state.trainUserID})
-           // Actions.AppIntroContainer({userID: this.state.trainUserID})
+          //  Actions.TrainContainer({userID: this.state.trainUserID})
+           Actions.AppIntroContainer({userID: this.state.trainUserID})
            //Actions.home();
         }
 
@@ -254,16 +254,16 @@ export default class Login extends PureComponent<void, void, State> {
                     translucent
                 />
                 <Image
-                    source={require('../../../assets/login_background.png')}
+                    source={require('../../../assets/loginUp.png')}
                     style={styles.imageContainer}
                 >
                     <View style={styles.logoContainer}>
                         <AnimatedLogo
-                            borderColor={Colors.white}
+                            borderColor={Colors.primary1}
                             borderRadius={35}
                             duration={2000}
                             fontColor="#FFF"
-                            image={<Image source={require('../../../assets/avatar07.png')}/>}
+                            image={<Image source={require('../../../assets/logo1.png')}/>}
                             size={100}
                         />
                         {

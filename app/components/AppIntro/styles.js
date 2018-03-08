@@ -19,6 +19,15 @@ export const styles = StyleSheet.create({
             height:'100%',
             padding:'1%',
         },
+    imageContainer: {
+        flex: 1,
+        // remove width and height to override fixed static size
+        width: null,
+        height: null,
+        alignItems:'center',
+        justifyContent: 'flex-end',
+        resizeMode: 'cover'
+    },
     block: {
         flex: 1,
         margin: 8,

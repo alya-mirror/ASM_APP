@@ -7,7 +7,7 @@ import * as Animatable from 'react-native-animatable';
 import {ScrollView, Image, StatusBar, View, Text, LayoutAnimation,Dimensions,
     Alert, Animated,TouchableOpacity,TouchableHighlight,TouchableWithoutFeedback,StyleSheet,} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import styles, {TrainingScreenStyle} from './styles';
+import {styles} from './styles';
 import SmartScrollView from 'react-native-smart-scroll-view';
 import AppText from '../Core/AppText';
 import AnimatedLogo from '../AnimatedLogo';
@@ -17,7 +17,10 @@ import dismissKeyboard from "react-native-dismiss-keyboard";
 import {validateEmail, validatePassword} from "../../lib/validator";
 import AppIntros from 'react-native-app-intro';
 const io = require('socket.io-client');
-
+import Page1 from '../../../assets/profile/profile01.png';
+import Page2 from '../../../assets/introScreen/2.png';
+import Page3 from '../../../assets/introScreen/2.png';
+import Page4 from '../../../assets/introScreen/2.png';
 
 type State = {
     startAnimation: boolean,
@@ -47,7 +50,7 @@ export default class AppIntro extends PureComponent<void, Props, State> {
         super(props);
        // this.url = 'http://192.168.100.4:3100';
        // this.socket = io.connect('http://192.168.100.4:3100');
-       this.socket = new io.connect('http://192.168.100.4:3100', {
+       this.socket = new io.connect('http://192.168.0.6:3100', {
             transports: ['websocket'] // you need to explicitly tell it to use websockets
         });
         this.socket.on('connect', () => {
@@ -84,10 +87,10 @@ export default class AppIntro extends PureComponent<void, Props, State> {
     onSkipBtnHandle = (index) => {
         //Alert.alert('Skip');
         console.log(index);
-        Actions.home();
+        Actions.TrainContainer({userID: this.state.trainUserID})
     }
     doneBtnHandle = () => {
-       // Alert.alert('Done');
+        Actions.TrainContainer({userID: this.state.trainUserID})
 
     }
     nextBtnHandle = (index) => {
@@ -120,10 +123,11 @@ export default class AppIntro extends PureComponent<void, Props, State> {
         }, {
             title: 'Page 2',
             description: 'Description 2',
-            img: require('../../../assets/avatar.png'),
+            img: require( '../../../assets/introScreen/4.png'),
             imgStyle: {
-                height: 93 * 2.5,
-                width: 103 * 2.5,
+                height: Dimensions.get('window').height,
+                width: Dimensions.get('window').width,
+                paddingTop:100,
             },
             backgroundColor: '#a4b602',
             fontColor: '#fff',
@@ -140,8 +144,93 @@ export default class AppIntro extends PureComponent<void, Props, State> {
                 onDoneBtnClick={this.doneBtnHandle}
                 onSkipBtnClick={this.onSkipBtnHandle}
                 onSlideChange={this.onSlideChangeHandle}
-                pageArray={pageArray}
-            />
+                showSkipButton={true}
+                leftTextColor={Colors.primary}
+                rightTextColor={Colors.primary}
+                dotColor={Colors.primaryLight}
+                activeDotColor={Colors.primary}
+                showDots={true}
+                showDoneButton={true}
+               >
+
+                <View style={{backgroundColor:'#fff', height: Dimensions.get('window').height,
+                    width: Dimensions.get('window').width,}}>
+                    <Image
+                        source={require('../../../assets/introScreen/1.png')}
+                        style={styles.imageContainer}
+                    >
+                        <StatusBar
+                            animated
+                            backgroundColor={Colors.primaryDark}
+                            barStyle="light-content"
+                            translucent
+                        />
+                       <View style={{width: Dimensions.get('window').width, height:'50%',paddingTop:60,
+                       alignItems:'center'}}>
+                        <Text style={{ color:'#787878',fontSize:25, fontWeight:'500' ,}}>Face Recognition</Text>
+                           <Text fontStyle={ 'italic'} style={{ textAlign:'center', color:'#afafaf',marginTop:10, textDecoration:'italic', width:300}}>You will have to stand in
+                           front of Alya Smart Mirror so it can recognise you and speak with you as well and this will help in the next steps.</Text>
+                       </View>
+                    </Image>
+                </View>
+                <View style={{backgroundColor:'#fff', height: Dimensions.get('window').height,
+                    width: Dimensions.get('window').width,}}>
+                    <Image
+                        source={require('../../../assets/introScreen/2.png')}
+                        style={styles.imageContainer}
+                    >
+                        <View style={{width: Dimensions.get('window').width, height:'50%',paddingTop:60,
+                            alignItems:'center'}}>
+                            <Text style={{ color:'#787878',fontSize:25, fontWeight:'500' ,}}>Explore</Text>
+                            <Text fontStyle={ 'italic'} style={{ textAlign:'center', color:'#afafaf',marginTop:10, textDecoration:'italic', width:280}}>
+                                Explore the installed Add-ons on Alya Smart Mirror and configure them through Alya Mobile App.  </Text>
+                        </View>
+                    </Image>
+                </View>
+                <View style={{backgroundColor:'#fff', height: Dimensions.get('window').height,
+                    width: Dimensions.get('window').width,}}>
+                    <Image
+                        source={require('../../../assets/introScreen/3.png')}
+                        style={styles.imageContainer}
+                    >
+                        <View style={{width: Dimensions.get('window').width, height:'50%',paddingTop:60,
+                            alignItems:'center'}}>
+                            <Text style={{ color:'#787878',fontSize:25, fontWeight:'500' ,}}>Find New Add-Ons</Text>
+                            <Text fontStyle={ 'italic'} style={{ textAlign:'center', color:'#afafaf',marginTop:10, textDecoration:'italic', width:300}}>
+                                Find new Add-on from every where just with click of a button.
+                            </Text>
+                        </View>
+                    </Image>
+                </View>
+                <View style={{backgroundColor:'#fff', height: Dimensions.get('window').height,
+                    width: Dimensions.get('window').width,}}>
+                    <Image
+                        source={require('../../../assets/introScreen/4.png')}
+                        style={styles.imageContainer}
+                    >
+                        <View style={{width: Dimensions.get('window').width, height:'50%',paddingTop:60,
+                            alignItems:'center'}}>
+                            <Text style={{ color:'#787878',fontSize:25, fontWeight:'500' ,}}>SetUp Add-Ons</Text>
+                            <Text fontStyle={ 'italic'} style={{ textAlign:'center', color:'#afafaf',marginTop:10, textDecoration:'italic', width:300}}>
+                               Your Setting is Alya setting and all the setting will reflect on Alya Smart Mirror </Text>
+                        </View>
+                    </Image>
+                </View>
+                <View style={{backgroundColor:'#fff', height: Dimensions.get('window').height,
+                    width: Dimensions.get('window').width,}}>
+                    <Image
+                        source={require('../../../assets/introScreen/5.png')}
+                        style={styles.imageContainer}
+                    >
+                        <View style={{width: Dimensions.get('window').width, height:'50%',paddingTop:60,
+                            alignItems:'center'}}>
+                            <Text style={{ color:'#787878',fontSize:25, fontWeight:'500' ,}}>Ready To Meet Alya</Text>
+                            <Text fontStyle={ 'italic'} style={{ textAlign:'center', color:'#afafaf',marginTop:10, textDecoration:'italic', width:300}}>
+                                Your Setting is Alya setting and all the setting will reflect on Alya Smart Mirror </Text>
+                        </View>
+                    </Image>
+                </View>
+            </AppIntros>
         );
 
 

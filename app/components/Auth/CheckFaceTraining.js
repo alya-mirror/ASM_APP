@@ -38,7 +38,7 @@ type State = {
     startAnimation: boolean,
     hideWelcomeMessage: boolean
 }
-
+import TypingText from 'react-native-typing-text';
 const {width: WINDOW_WIDTH} = Dimensions.get('window');
 
 export default class CheckFaceTraining extends PureComponent<void, Props, State> {
@@ -48,9 +48,9 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
 
     constructor(props) {
         super(props);
-       // this.url = 'http://192.168.100.4:3100';
-       // this.socket = io.connect('http://192.168.100.4:3100');
-       this.socket = new io.connect('http://192.168.100.4:3100', {
+       // this.url = 'http://192.168.0.6:3100';
+       // this.socket = io.connect('http://192.168.0.6:3100');
+       this.socket = new io.connect('http://192.168.0.10:3100', {
             transports: ['websocket'] // you need to explicitly tell it to use websockets
         });
         this.socket.on('connect', () => {
@@ -85,6 +85,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
 
     componentDidMount() {
         try {
+
             this.socket.on('connect', () => {
                 console.log("socket connected in train", this.props.userID);
                 this.socket.emit("start_training",JSON.stringify({"data": {"userId": this.props.userID}}))
@@ -105,7 +106,6 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
             this.socket.on('disconnect', () => {
                 console.log("Disconnected Socket!")
             })
-
         }
         catch (error) {
          //   bugsnag.notify(error);
@@ -127,7 +127,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
         let approvedAddons = new Array();
         let addonName='';
         let iconName='';
-        return fetch(`http://192.168.100.4:3100/api/addons/:${encodeURIComponent(global.userInfo.userId)}`, {
+        return fetch(`http://192.168.0.10:3100/api/addons/:${encodeURIComponent(global.userInfo.userId)}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -175,7 +175,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
                 setTimeout(()=> {  this.setState({
                     completeActionTraining:true,
                 });
-                },4000);
+                },8000);
 
             })
 
@@ -208,8 +208,12 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
     }
 
     _onPress () {
-        this._updateRecord();
-        this._fetchUserAddons();
+        setTimeout(()=>{
+            this._updateRecord();
+            this._fetchUserAddons();
+        },4000);
+
+
     }
 
     _onAnimationComplete () {
@@ -233,22 +237,46 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
                     translucent
                 />
                 <Image
-                    source={require('../../../assets/backgroundS.jpg')}
+                    source={require('../../../assets/train.png')}
                     style={styles.imageContainer}
                 >
+                    <View style={styles.logoContainerTrain}>
+                        <AnimatedLogo
+                            borderColor={Colors.white}
+                            borderRadius={35}
+                            duration={2000}
+                            fontColor="#FFF"
+                           // image={<Image source={require('../../../assets/avatar07.png')}/>}
+                            size={100}
+                        />
+                        {
+
+                        }
+                    </View>
+
                     <View style={TrainingScreenStyle.container}>
+
                         <Text  style={TrainingScreenStyle.welcomeText}>
                             Welcome To
                         </Text>
                         <Text  style={TrainingScreenStyle.subTitleWelcomeText}>
                             A l y a   S m a r t   M i r r o r
                         </Text>
-                        <Text  style={TrainingScreenStyle.startingText}>
-                            {global.userInfo.firstName} Please stand in front of Alya Smart Mirror so it can recognize you, when this process is done this window will
-                            disappear!
-                        </Text>
+                        <View style={{ justifyContent: 'flex-start',
+                            alignItems:'flex-start', textAlign:'left',marginTop:10, width:200}}>
+
+                                <TypingText
+                                    color =  "#999"
+                                    textSize={12}
+
+                                    typingAnimationDuration={50}
+                                    blinkingCursorAnimationDuration={350}
+                                    text = { global.userInfo.firstName + " please stand in front of Alya Smart Mirror so it can recognize you, " +
+                                    "when this process is done this window will disappear!"}
+                                />
+                        </View>
                     </View>
-          <View style={{marginBottom:100}}>
+          <View style={{marginBottom:50, marginTop:50}}>
                     <TrainingRectangularButton
                         duration={1000}
                         fontColor="#FFF"

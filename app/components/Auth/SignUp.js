@@ -115,7 +115,7 @@ export default class SignUp extends PureComponent<void, void, State> {
 
 
     _onAnimationComplete() {
-            Actions.home();
+        Actions.login();
     }
 
     async _updateRecord() {
@@ -193,16 +193,16 @@ export default class SignUp extends PureComponent<void, void, State> {
                     translucent
                 />
                 <Image
-                    source={require('../../../assets/backgroundS.jpg')}
+                    source={require('../../../assets/loginUp.png')}
                     style={styles.imageContainer}
                 >
                     <View style={styles.logoContainer}>
                         <AnimatedLogo
-                            borderColor={Colors.white}
+                            borderColor={Colors.primary1}
                             borderRadius={35}
                             duration={2000}
                             fontColor="#FFF"
-                            image={<Image source={require('../../../assets/avatar07.png')}/>}
+                            image={<Image source={require('../../../assets/logo1.png')}/>}
                             size={100}
                         />
                         {
