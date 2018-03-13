@@ -1,4 +1,4 @@
-# ASM_APP
+# asm-app
 React native mobile app for alya smart mirror
 
 # Installing
