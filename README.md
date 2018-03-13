@@ -8,7 +8,3 @@ React native mobile app for alya smart mirror
 # Running App
 1-Run the app from the project root dir command run "react-native run-android".
 2-Runing for IOS command run "react-native run-ios".
-
-# Debuging
-1-
-
