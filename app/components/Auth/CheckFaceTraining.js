@@ -17,8 +17,12 @@ import dismissKeyboard from "react-native-dismiss-keyboard";
 import {validateEmail, validatePassword} from "../../lib/validator";
 import image_youtube from '../Home/images/youtube.png'
 import image_time from '../Home/images/time.png'
+import recog from '../Home/images/recog.png'
+import temperature from '../Home/images/temperature.png'
+import light from '../Home/images/light.png'
+import voice from '../Home/images/voice.png'
+import gesture from '../Home/images/gesture.png'
 import image_calendar from '../Home/images/calendar.png'
-
 const io = require('socket.io-client');
 
 
@@ -123,6 +127,9 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
 
 
     _fetchUserAddons(){
+        let coreAddons = [['123', 'Face Recognition',recog,' '],['123456', 'Gesture',gesture,' '],['1234', 'voice Recognition',voice,' ']
+            ,['1234567', 'Sensor Data',light,' ']];
+        global.userAddons = coreAddons;
         let userAddons = new Array();
         let approvedAddons = new Array();
         let addonName='';
@@ -148,7 +155,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
                         addonName='Date Time'
                         iconName=image_calendar;
                     }
-                    userAddons.push([addon._id ,addonName ,iconName ,addon.npm_name])
+                    global.userAddons.push([addon._id ,addonName ,iconName ,addon.npm_name])
                     addonName=''
                     iconName='';
                 }
@@ -170,7 +177,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
                     approvedAddons.push([addon._id ,addonName ,iconName ,addon.npm_name])
 
                 }
-                global.userAddons= userAddons;
+               // global.userAddons= userAddons;
                 global.approvedAddons = approvedAddons;
                 setTimeout(()=> {  this.setState({
                     completeActionTraining:true,

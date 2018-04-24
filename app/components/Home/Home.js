@@ -122,7 +122,7 @@ export default class Home extends PureComponent<void, Props, State> {
                 onLongPress={() => this._activateEditPluginsOptions()}
                 disabled={this.state.disabled}
                 underlayColor={"#fff"}
-                style={{width: 75, height: 75, padding: 1, position: 'relative', borderRadius: 60,}}
+                style={{width: 100, height: 75, padding: 1, position: 'relative', borderRadius: 60,}}
                 onPress={this._onPressCell.bind(this, data)}>
                 <View style={{flex: 1, padding: 1, position: 'relative', backgroundColor: "transparent", borderRadius: 60,}}>
                     <View style={{
@@ -131,7 +131,7 @@ export default class Home extends PureComponent<void, Props, State> {
                     }}>
                         <Image source={data[2]}
                                style={{width: 50, height: 50, marginHorizontal: 5, marginBottom: 5,}}/>
-                        <Text>{data[1]}</Text>
+                         <Text style={{fontSize:12, textAlign:'center', width:100,}}>{data[1]}</Text>
                     </View>
                     <TouchableOpacity
                         disabled={!this.state.disabled}
@@ -324,7 +324,7 @@ export default class Home extends PureComponent<void, Props, State> {
             }
         })
 
-        return fetch(`http://192.168.100.4:3100/api/userAddons/:${encodeURIComponent(component.props.data[0])}`, {
+        return fetch(`http://192.168.0.10:3100/api/userAddons/:${encodeURIComponent(component.props.data[0])}`, {
             method: 'DELETE',
             headers: {
                 Accept: 'application/json',
@@ -349,10 +349,30 @@ export default class Home extends PureComponent<void, Props, State> {
         let cellIndex = this._sortableSudokuGrid._cells.findIndex((cell) => {
             return cell.component === component
         });
+        console.log('datass' , JSON.stringify(component.props.data[3]));
         //console.log(`_onRemoveCellButtonPress cellIndex = ${cellIndex}`)
         // Alert.alert('clicked grid cell -> ' + data.title)
-        Actions.PluginSetting({text: data[1]});
-        this._sortableSudokuGrid.removeCell({
+    /*    return fetch(`http://192.168.0.10:3100/api/userConfigurationSchema/:${encodeURIComponent(component.props.data[3])}`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-type': 'application/json'
+            },
+
+        })
+            .then((response) => {
+                console.log('unInstall' +  JSON.stringify(response))
+
+
+                console.log('response data ' , JSON.stringify(response));
+            })
+
+            .catch((error) => {
+                console.log(error);
+
+            });*/
+         Actions.PluginSetting({text: data[1], addonName:component.props.data[3], ImageName:component.props.data[2]});
+ /*       this._sortableSudokuGrid.removeCell({
             cellIndex,
             callback: (removedDataList) => {
                 //let sortedDataSource = this._sortableSudokuGrid.getSortedDataSource()
@@ -365,7 +385,7 @@ export default class Home extends PureComponent<void, Props, State> {
                     })
                 }
             }
-        })
+        })*/
     };
     _onRemoveCandidatesCellButtonPress = (component) => {
         console.log('_onRemoveCandidatesCellButtonPress cellIndex',component.props.data);
@@ -389,7 +409,7 @@ export default class Home extends PureComponent<void, Props, State> {
             }
         })
 
-        return fetch('http://192.168.100.4:3100/api/userAddons/', {
+        return fetch('http://192.168.0.10:3100/api/userAddons/', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -477,7 +497,7 @@ export default class Home extends PureComponent<void, Props, State> {
                                 containerStyle={{backgroundColor: 'transparent', alignItems: 'center',}}
                                 columnCount={columnCount}
                                 rowWidth={300}
-                                rowHeight={80}
+                                rowHeight={100}
                                 dataSource={this.state.dataSource}
                                 renderCell={this._renderGridCell}
                                 sortable={false}

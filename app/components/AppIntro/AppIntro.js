@@ -197,7 +197,7 @@ export default class AppIntro extends PureComponent<void, Props, State> {
                             alignItems:'center'}}>
                             <Text style={{ color:'#787878',fontSize:25, fontWeight:'500' ,}}>Find New Add-Ons</Text>
                             <Text fontStyle={ 'italic'} style={{ textAlign:'center', color:'#afafaf',marginTop:10, textDecoration:'italic', width:300}}>
-                                Find new Add-on from every where just with click of a button.
+                                Find new Add-on from Alya addons store just with click of a button.
                             </Text>
                         </View>
                     </Image>
@@ -212,7 +212,7 @@ export default class AppIntro extends PureComponent<void, Props, State> {
                             alignItems:'center'}}>
                             <Text style={{ color:'#787878',fontSize:25, fontWeight:'500' ,}}>SetUp Add-Ons</Text>
                             <Text fontStyle={ 'italic'} style={{ textAlign:'center', color:'#afafaf',marginTop:10, textDecoration:'italic', width:300}}>
-                               Your Setting is Alya setting and all the setting will reflect on Alya Smart Mirror </Text>
+                               Your addons setting here will reflects on your Alya Smart Mirror. </Text>
                         </View>
                     </Image>
                 </View>
@@ -226,7 +226,7 @@ export default class AppIntro extends PureComponent<void, Props, State> {
                             alignItems:'center'}}>
                             <Text style={{ color:'#787878',fontSize:25, fontWeight:'500' ,}}>Ready To Meet Alya</Text>
                             <Text fontStyle={ 'italic'} style={{ textAlign:'center', color:'#afafaf',marginTop:10, textDecoration:'italic', width:300}}>
-                                Your Setting is Alya setting and all the setting will reflect on Alya Smart Mirror </Text>
+                                Click done and stand in front of your Alay Smart Mirror for face recognition training process.</Text>
                         </View>
                     </Image>
                 </View>

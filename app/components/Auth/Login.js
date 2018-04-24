@@ -48,7 +48,7 @@ export default class Login extends PureComponent<void, void, State> {
             console.log('connected')
         });
     this.state = {
-        email: 'a@a.com',
+        email: 'John@yahoo.com',
         emailErrorMessage: null,
         password: 'qwe123',
         passwordErrorMessage: null,
@@ -183,6 +183,7 @@ export default class Login extends PureComponent<void, void, State> {
         {
           //  Actions.TrainContainer({userID: this.state.trainUserID})
            Actions.AppIntroContainer({userID: this.state.trainUserID})
+           // Actions.PluginSetting({text: "name"});
            //Actions.home();
         }
 

@@ -153,7 +153,7 @@ export default class AppRouter extends PureComponent {
                             duration={0}
                             isDrawerEnable
                             key="home"
-                            renderBackButton={this._renderNavigationDrawer.bind(this)}
+                           // renderBackButton={this._renderNavigationDrawer.bind(this)}
                             title="Home"
                             type="reset"
                         />

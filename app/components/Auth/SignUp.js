@@ -77,7 +77,7 @@ export default class SignUp extends PureComponent<void, void, State> {
          dismissKeyboard();
          if (!this.state.emailErrorMessage && this.state.email && !this.state.passwordErrorMessage && this.state.password) {
 
-             return fetch('http://192.168.100.4:3100/api/user/', {
+             return fetch('http://192.168.0.10:3100/api/user/', {
                  method: 'POST',
                  headers: {
                      'Accept': 'application/json',
