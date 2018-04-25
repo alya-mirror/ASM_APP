@@ -64,6 +64,7 @@ export const styles = StyleSheet.create({
     },
     pluginContainerStyle:{
       flex:1,
+        width:'100%',
         marginTop:3,
         marginBottom:5,
         borderRadius: 40,

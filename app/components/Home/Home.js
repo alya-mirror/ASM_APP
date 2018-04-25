@@ -6,7 +6,7 @@ const {
 } = React;
 import * as Animatable from 'react-native-animatable';
 import {
-    ScrollView, Image, StatusBar, View, Text, LayoutAnimation,
+    ScrollView, Image, StatusBar, View, Text, LayoutAnimation,ToastAndroid,
     Alert, Animated, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback, StyleSheet,
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
@@ -115,7 +115,7 @@ export default class Home extends PureComponent<void, Props, State> {
     }
 
     _renderGridCell = (data, component) => {
-        //console.log(`rerender!!! _renderGridCell`)
+         console.log(`rerender!!! _renderGridCell`);
         return (
 
             <TouchableHighlight
@@ -235,7 +235,7 @@ export default class Home extends PureComponent<void, Props, State> {
                         justifyContent: 'center', alignItems: 'center', flex: 1,
                     }}>
                         <Image source={data[2]}
-                               style={{width: 45, height: 45, marginHorizontal: 10, marginBottom: 5,}}/>
+                               style={{width: 40, height: 40, marginHorizontal: 10, marginBottom: 5, resizeMode:'center'}}/>
                         <Text style={{fontSize:12,}}>{data[1]}</Text>
                     </View>
                     <TouchableOpacity
@@ -304,45 +304,51 @@ export default class Home extends PureComponent<void, Props, State> {
         }
     };
     _onRemoveCellButtonPress = (component) => {
+        console.log("component", component);
         let cellIndex = this._sortableSudokuGrid._cells.findIndex((cell) => {
             return cell.component === component
         });
         //console.log(`_onRemoveCellButtonPress cellIndex = ${cellIndex}`)
 
-        this._sortableSudokuGrid.removeCell({
-            cellIndex,
-            callback: (removedDataList) => {
-                //let sortedDataSource = this._sortableSudokuGrid.getSortedDataSource()
-                console.log(`_onRemoveCellButtonPress get sortedDataSource`)
-                //console.log(sortedDataSource)
-                if (removedDataList.length > 0) {
-                    let data = removedDataList[0]
-                    this._candidatesSudokuGrid.addCell({
-                        data,
-                    })
-                }
-            }
-        })
 
-        return fetch(`http://192.168.0.10:3100/api/userAddons/:${encodeURIComponent(component.props.data[0])}`, {
-            method: 'DELETE',
-            headers: {
-                Accept: 'application/json',
-                'Content-type': 'application/json'
-            },
-          
-        })
-            .then((response) => {
-                console.log('unInstall' +  JSON.stringify(response))
+        console.log("component", component.props.data[0]);
+ if(component.props.data[0] === '123' || component.props.data[0] === '123456' ||component.props.data[0] === '1234'|| component.props.data[0] === '1234567')
+ {
+     Alert.alert("It's not Possible to uninstall core services")
+ }else {
+     this._sortableSudokuGrid.removeCell({
+         cellIndex,
+         callback: (removedDataList) => {
+             //let sortedDataSource = this._sortableSudokuGrid.getSortedDataSource()
+             console.log(`_onRemoveCellButtonPress get sortedDataSource`)
+             //console.log(sortedDataSource)
+             if (removedDataList.length > 0) {
+                 let data = removedDataList[0]
+                 this._candidatesSudokuGrid.addCell({
+                     data,
+                 })
+             }
+         }
+     });
+     return fetch(`http://192.168.0.10:3100/api/userAddons/:${encodeURIComponent(component.props.data[0])}`, {
+         method: 'DELETE',
+         headers: {
+             Accept: 'application/json',
+             'Content-type': 'application/json'
+         },
+
+     })
+         .then((response) => {
+             console.log('unInstall' +  JSON.stringify(response))
 
 
+         })
 
-            })
+         .catch((error) => {
+             console.log(error);
 
-            .catch((error) => {
-                console.log(error);
-
-            });
+         });
+ }
 
     };
     _onSettingCellButtonPress = (component, data) => {
@@ -371,7 +377,7 @@ export default class Home extends PureComponent<void, Props, State> {
                 console.log(error);
 
             });*/
-         Actions.PluginSetting({text: data[1], addonName:component.props.data[3], ImageName:component.props.data[2]});
+         Actions.PluginSetting({text: data[1], addonName:component.props.data[3], ImageName:component.props.data[2], addonID:component.props.data[0]});
  /*       this._sortableSudokuGrid.removeCell({
             cellIndex,
             callback: (removedDataList) => {
@@ -388,7 +394,7 @@ export default class Home extends PureComponent<void, Props, State> {
         })*/
     };
     _onRemoveCandidatesCellButtonPress = (component) => {
-        console.log('_onRemoveCandidatesCellButtonPress cellIndex',component.props.data);
+        console.log('_onRemoveCandidatesCellButtonPress cellIndex1',component.props.data);
         let cellIndex = this._candidatesSudokuGrid._cells.findIndex((cell) => {
             return cell.component === component
         })
@@ -397,11 +403,12 @@ export default class Home extends PureComponent<void, Props, State> {
         this._candidatesSudokuGrid.removeCell({
             cellIndex,
             callback: (removedDataList) => {
-                //let sortedDataSource = this._candidatesSudokuGrid.getSortedDataSource()
-                //console.log(`_onRemoveCandidatesCellButtonPress get sortedDataSource`)
-                //console.log(sortedDataSource)
-                if (removedDataList.length > 0) {
-                    let data = removedDataList[0]
+               // let sortedDataSource = this._candidatesSudokuGrid.getSortedDataSource()
+                // console.log(`_onRemoveCandidatesCellButtonPress get sortedDataSource`, sortedDataSource)
+                 console.log(removedDataList);
+                if (removedDataList.length === 1 ) {
+                    console.log('true');
+                    let data = removedDataList[0];
                     this._sortableSudokuGrid.addCell({
                         data,
                     })
@@ -423,9 +430,14 @@ export default class Home extends PureComponent<void, Props, State> {
             )
         })
             .then((response) => {
-                console.log('install' +  JSON.stringify(response))
-
-
+                console.log('install' +  JSON.stringify(response));
+             /*       ToastAndroid.showWithGravity(
+                        'install' +  JSON.stringify(response),
+                           ToastAndroid.LONG,
+                           ToastAndroid.BOTTOM,
+                           200,
+                           50,
+                       );*/
 
             })
 
@@ -525,23 +537,26 @@ export default class Home extends PureComponent<void, Props, State> {
                         }}
                     >
                         <View style={styles.pluginContainerStyle}>
-                            <ScrollView style={{backgroundColor: 'transparent', padding: 5, borderRadius: 30,}}>
+                {/*             <ScrollView style={{backgroundColor: 'transparent', padding: 5, borderRadius: 30,}}>*/}
                                 <SortableSudokuGrid
-                                    rowWidth={330}
+                                    rowWidth={280}
                                     ref={component => this._candidatesSudokuGrid = component}
                                     containerStyle={{
-                                        backgroundColor: 'transparent',
+                                        flex:1,
+                                    //    backgroundColor: '#078',
+                                        // width:10,
                                         padding: 5,
+                                       // height:200,
                                         borderRadius: 30,
-                                        position: 'relative',
+                                         position: 'relative',
                                     }}
-                                    rowHeight={100}
-                                    columnCount={4}
+                                     rowHeight={80}
+                                    columnCount={3}
                                     dataSource={this.state.candidates}
                                     renderCell={this._renderCandidateCell}
                                     sortable={false}
                                 />
-                            </ScrollView>
+                  {/*           </ScrollView>*/}
                         </View>
                     </PopupDialog>
                     <Fab

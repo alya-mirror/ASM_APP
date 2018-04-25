@@ -127,7 +127,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
 
 
     _fetchUserAddons(){
-        let coreAddons = [['123', 'Face Recognition',recog,' '],['123456', 'Gesture',gesture,' '],['1234', 'voice Recognition',voice,' ']
+        let coreAddons = [['123', 'Face Recog',recog,' '],['123456', 'Gesture',gesture,' '],['1234', 'voice Recog',voice,' ']
             ,['1234567', 'Sensor Data',light,' ']];
         global.userAddons = coreAddons;
         let userAddons = new Array();
