@@ -91,12 +91,12 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
         try {
 
             this.socket.on('connect', () => {
-                console.log("socket connected in train", this.props.userID);
-                this.socket.emit("start_training",JSON.stringify({"data": {"userId": this.props.userID}}))
+                console.log("socket connected in train", global.userInfo.userId);
+                this.socket.emit("start_training",JSON.stringify({"data": {"userId": global.userInfo.userId}}))
                 this._onPress();
                 this.socket.on("finished_training", (userData) => {
                     console.log('complete training', userData);
-                    if(userData.data.userId === this.props.userID){
+                    if(userData.data.userId === global.userInfo.userId){
                         this._fetchUserAddons();
                     }
 
@@ -142,8 +142,8 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
             },
         }).then((response) => response.json())
             .then((responseJson) => {
-                console.log('user addons after train is  ' +  JSON.stringify(responseJson))
-                for(let addon of responseJson.userInstalledAddons ){
+
+               for(let addon of responseJson.userInstalledAddons ){
                     if(addon.description.toString().indexOf('clock')>-1){
                        addonName='Clock'
                         iconName=image_time;
@@ -155,12 +155,12 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
                         addonName='Date Time'
                         iconName=image_calendar;
                     }
-                    global.userAddons.push([addon._id ,addonName ,iconName ,addon.npm_name])
+                    global.userAddons.push([addon._id ,addonName ,iconName ,addon.npm_name]);
                     addonName=''
                     iconName='';
                 }
 
-                for(let addon of responseJson.allApprovedUninstalledAddons ){
+                for(let addon of responseJson.userUninstalledAddons ){
                     addonName=''
                     iconName='';
                     if(addon.description.toString().indexOf('clock')>-1){
@@ -179,6 +179,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
                 }
                // global.userAddons= userAddons;
                 global.approvedAddons = approvedAddons;
+                console.log('global train is  ' +  JSON.stringify(global.approvedAddons))
                 setTimeout(()=> {  this.setState({
                     completeActionTraining:true,
                 });

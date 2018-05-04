@@ -69,7 +69,9 @@ export default class PluginSettings extends PureComponent<void, Props, State> {
     }
 
     componentDidMount() {
-        this.getApi();
+       // this.getApi();
+
+        this._fetchUserAddons();
     }
     componentWillMount() {
         if(this.props.text === 'Youtube'){
@@ -84,6 +86,7 @@ export default class PluginSettings extends PureComponent<void, Props, State> {
         }
     }
     _onPress() {
+        console.log('id from setting',this.props.addonID )
         this.setState({
             startAnimation: true
         });
@@ -169,7 +172,7 @@ export default class PluginSettings extends PureComponent<void, Props, State> {
                     iconName = '';
                 }
 
-                for (let addon of responseJson.allApprovedUninstalledAddons) {
+                for (let addon of responseJson.userUninstalledAddons) {
                     addonName = ''
                     iconName = '';
                     if (addon.description.toString().indexOf('clock') > -1) {

@@ -47,3 +47,4 @@ android/keystores/debug.keystore
 /docs/ebook/api/
 /docs/ebook/Import/
 /android/app/build/
+app/components/Home/Home.js
