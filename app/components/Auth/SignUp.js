@@ -11,6 +11,7 @@ import GroupTextField from '../Core/GroupTextField';
 import AppText from '../Core/AppText';
 import AppTextButton from '../Core/AppTextButton';
 import {validateEmail, validatePassword} from '../../lib/validator';
+import config from '../../../config.default'
 
 const {
     PureComponent,
@@ -77,7 +78,7 @@ export default class SignUp extends PureComponent<void, void, State> {
          dismissKeyboard();
          if (!this.state.emailErrorMessage && this.state.email && !this.state.passwordErrorMessage && this.state.password) {
 
-             return fetch('http://192.168.0.10:3100/api/user/', {
+             return fetch('http://'+config.host+':3100/api/user/', {
                  method: 'POST',
                  headers: {
                      'Accept': 'application/json',

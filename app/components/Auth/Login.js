@@ -12,6 +12,9 @@ import GroupTextField from '../Core/GroupTextField';
 import AppText from '../Core/AppText';
 import AppTextButton from '../Core/AppTextButton';
 import {validateEmail, validatePassword} from '../../lib/validator';
+import config from '../../../config.default'
+
+
 var io = require('socket.io-client');
 const {
     PureComponent,
@@ -60,33 +63,33 @@ export default class Login extends PureComponent<void, void, State> {
         hideWelcomeMessage: false,
     };
     }
-    
+
     componentWillMount () {
         // Using keyboardWillShow/Hide looks 1,000 times better, but doesn't work on Android
         // TODO: Revisit this if Android begins to support - https://github.com/facebook/react-native/issues/3468
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
     }
-    
+
     _keyboardDidShow () {
         this.setState({
             hideWelcomeMessage: true
         });
     }
-    
+
     _keyboardDidHide () {
         this.setState({
             hideWelcomeMessage: false
         });
     }
-    
+
     _onPress () {
         dismissKeyboard();
         if (!this.state.emailErrorMessage && this.state.email && !this.state.passwordErrorMessage && this.state.password) {
             this.setState({
                 startAnimation: true
             });
-            return fetch('http://192.168.0.10:3100/api/user/login', {
+            return fetch('http://'+config.host+':3100/api/user/login', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -123,7 +126,7 @@ export default class Login extends PureComponent<void, void, State> {
             this._checkEmail(this.state.email);
             this._checkPassword(this.state.password);
         }
-        
+
     }
 
 
@@ -149,7 +152,7 @@ export default class Login extends PureComponent<void, void, State> {
 
     _fetchUserAddons(){
         const params = {userId: global.userInfo.userId};
-        let url = `http://192.168.0.10:3100/api/addons/:userId${encodeURIComponent(global.userInfo.userId)}`;
+        let url = `http://${config.host}:3100/api/addons/:userId${encodeURIComponent(global.userInfo.userId)}`;
         console.log('Addons' );
         return fetch(url , {
             method: 'GET',
@@ -202,7 +205,7 @@ export default class Login extends PureComponent<void, void, State> {
             onCompleteFlag:1,
         });
     }
-    
+
     _checkEmail (email) {
         let errorMessage = validateEmail(email);
         if (!errorMessage) {
@@ -212,12 +215,12 @@ export default class Login extends PureComponent<void, void, State> {
             this.setState({email, emailErrorMessage: errorMessage});
         }
     }
-    
+
     _onEmailChange (email) {
        //this._checkEmail(email);
         this.setState({email, emailErrorMessage: null});
     }
-    
+
     _checkPassword (password) {
         let errorMessage = validatePassword(password);
         if (!errorMessage) {
@@ -227,12 +230,12 @@ export default class Login extends PureComponent<void, void, State> {
             this.setState({password, passwordErrorMessage: errorMessage});
         }
     }
-    
+
     _onPasswordChange (password) {
        // this._checkPassword(password);
         this.setState({password, passwordErrorMessage: null});
     }
-    
+
     render () {
         const {
             email,

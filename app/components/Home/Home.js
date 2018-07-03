@@ -1,4 +1,5 @@
 import React from 'react';
+import config from '../../../config.default'
 
 const {
     PureComponent,
@@ -330,7 +331,7 @@ export default class Home extends PureComponent<void, Props, State> {
              }
          }
      });
-     return fetch(`http://192.168.0.10:3100/api/userAddons/:${encodeURIComponent(component.props.data[0])}`, {
+     return fetch(`http://${config.host}:3100/api/userAddons/:${encodeURIComponent(component.props.data[0])}`, {
          method: 'DELETE',
          headers: {
              Accept: 'application/json',
@@ -377,7 +378,7 @@ export default class Home extends PureComponent<void, Props, State> {
                 console.log(error);
 
             });*/
-         Actions.PluginSetting({text: data[1], addonName:component.props.data[3], ImageName:component.props.data[2], addonID:component.props.data[0]});
+         Actions.PluginSetting({text: data[1], addonName:component.props.data[3], ImageName:component.props.data[2], q:component.props.data[0]});
  /*       this._sortableSudokuGrid.removeCell({
             cellIndex,
             callback: (removedDataList) => {
@@ -416,7 +417,7 @@ export default class Home extends PureComponent<void, Props, State> {
             }
         })
 
-        return fetch('http://192.168.0.10:3100/api/userAddons/', {
+        return fetch('http://'+config.host+':3100/api/userAddons/', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

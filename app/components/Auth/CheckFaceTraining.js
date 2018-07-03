@@ -1,4 +1,6 @@
 import React from 'react';
+import config from '../../../config.default'
+
 const {
     PureComponent,
     PropTypes
@@ -54,7 +56,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
         super(props);
        // this.url = 'http://192.168.0.6:3100';
        // this.socket = io.connect('http://192.168.0.6:3100');
-       this.socket = new io.connect('http://192.168.0.10:3100', {
+       this.socket = new io.connect('http://'+config.host+':3100', {
             transports: ['websocket'] // you need to explicitly tell it to use websockets
         });
         this.socket.on('connect', () => {
@@ -134,7 +136,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
         let approvedAddons = new Array();
         let addonName='';
         let iconName='';
-        return fetch(`http://192.168.0.10:3100/api/addons/:${encodeURIComponent(global.userInfo.userId)}`, {
+        return fetch(`http://${config.host}:3100/api/addons/:${encodeURIComponent(global.userInfo.userId)}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

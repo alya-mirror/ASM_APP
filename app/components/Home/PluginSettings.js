@@ -23,6 +23,8 @@ import light from '../Home/images/light.png'
 import voice from '../Home/images/voice.png'
 import gesture from '../Home/images/gesture.png'
 import image_calendar from '../Home/images/calendar.png'
+import config from '../../../config.default'
+
 type State = {
     startAnimation: boolean,
 }
@@ -111,8 +113,10 @@ export default class PluginSettings extends PureComponent<void, Props, State> {
         }
 
         this._fetchUserAddons();
-        const params = {addonID: this.props.addonID};
-        return fetch(`http://192.168.0.10:3100/api/userAddons/${encodeURIComponent(params.addonID)}`, {
+        const params = {addonID: this.props.id};
+        console.log(params._id + '  ' + params.addonID);
+
+        return fetch(`http://${config.host}:3100/api/userAddons/${encodeURIComponent(params.addonID)}`, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
@@ -146,7 +150,7 @@ export default class PluginSettings extends PureComponent<void, Props, State> {
         let approvedAddons = new Array();
         let addonName = '';
         let iconName = '';
-        return fetch(`http://192.168.0.10:3100/api/addons/:${encodeURIComponent(global.userInfo.userId)}`, {
+        return fetch(`http://${config.host}:3100/api/addons/:${encodeURIComponent(global.userInfo.userId)}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -214,7 +218,7 @@ export default class PluginSettings extends PureComponent<void, Props, State> {
     getApi() {
         const params = {addonName: this.props.addonName};
         console.log('addonName is ', params.addonName);
-        return fetch(`http://192.168.0.10:3100/api/addonsConfigurationSchema/:${encodeURIComponent(params.addonName)}`, {
+        return fetch(`http://${config.host}:3100/api/addonsConfigurationSchema/:${encodeURIComponent(params.addonName)}`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
