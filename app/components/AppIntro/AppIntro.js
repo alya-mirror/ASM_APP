@@ -1,5 +1,4 @@
 import React from 'react';
-import config from '../../../config.default'
 const {
     PureComponent,
     PropTypes
@@ -51,7 +50,7 @@ export default class AppIntro extends PureComponent<void, Props, State> {
         super(props);
        // this.url = 'http://192.168.100.4:3100';
        // this.socket = io.connect('http://192.168.100.4:3100');
-       this.socket = new io.connect('http://'+config.host+'', {
+       this.socket = new io.connect('http://localhost:3100', {
             transports: ['websocket'] // you need to explicitly tell it to use websockets
         });
         this.socket.on('connect', () => {

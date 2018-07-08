@@ -1,6 +1,4 @@
 import React from 'react';
-import config from '../../../config.default'
-
 const {
     PureComponent,
     PropTypes
@@ -25,6 +23,7 @@ import light from '../Home/images/light.png'
 import voice from '../Home/images/voice.png'
 import gesture from '../Home/images/gesture.png'
 import image_calendar from '../Home/images/calendar.png'
+import config from '../../../config.default'
 const io = require('socket.io-client');
 
 
@@ -54,9 +53,9 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
 
     constructor(props) {
         super(props);
-       // this.url = 'http://192.168.0.6:3100';
-       // this.socket = io.connect('http://192.168.0.6:3100');
-       this.socket = new io.connect('http://'+config.host+':3100', {
+       // this.url = 'http://localhost:3100';
+       // this.socket = io.connect('http://localhost:3100');
+       this.socket = new io.connect('http://localhost.:3100', {
             transports: ['websocket'] // you need to explicitly tell it to use websockets
         });
         this.socket.on('connect', () => {
@@ -136,7 +135,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
         let approvedAddons = new Array();
         let addonName='';
         let iconName='';
-        return fetch(`http://${config.host}:3100/api/addons/:${encodeURIComponent(global.userInfo.userId)}`, {
+        return fetch(`http://${config.host}:3100/api/addons/${encodeURIComponent(global.userInfo.userId)}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -144,7 +143,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
             },
         }).then((response) => response.json())
             .then((responseJson) => {
-
+console.log('from train', JSON.stringify(responseJson))
                for(let addon of responseJson.userInstalledAddons ){
                     if(addon.description.toString().indexOf('clock')>-1){
                        addonName='Clock'
@@ -157,7 +156,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
                         addonName='Date Time'
                         iconName=image_calendar;
                     }
-                    global.userAddons.push([addon._id ,addonName ,iconName ,addon.npm_name]);
+                    global.userAddons.push([addon._id ,addonName ,iconName ,addon.npm_name , addon.userAddonId]);
                     addonName=''
                     iconName='';
                 }
