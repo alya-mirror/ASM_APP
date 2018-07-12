@@ -118,14 +118,14 @@ export default class PluginSettings extends PureComponent<void, Props, State> {
         "height": parseInt(this.state.textHeight),
         "width": parseInt(this.state.text),
         "autoPlay": this.state.autoPlay,
-        "positions": positionsValues[this.state.position]
+        "position": positionsValues[this.state.position]
       };
 
     var addonSetting =
       {
         "theme": this.state.colorValue,
         "width": parseInt(this.state.text),
-        "positions": positionsValues[this.state.position]
+        "position": positionsValues[this.state.position]
       };
     var bodySetting = {};
     if (this.state.isYouTube) {
