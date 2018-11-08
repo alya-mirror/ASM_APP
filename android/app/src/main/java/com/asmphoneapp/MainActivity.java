@@ -1,13 +1,13 @@
 package com.asmphoneapp;
 import android.os.Bundle;
 
-import com.cboy.rn.splashscreen.SplashScreen;
+//import com.cboy.rn.splashscreen.SplashScreen;
 import com.facebook.react.ReactActivity;
 public class MainActivity extends ReactActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SplashScreen.show(this);  // here
+     //   SplashScreen.show(this);  // here
         super.onCreate(savedInstanceState);
     }
     /**
