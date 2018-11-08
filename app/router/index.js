@@ -6,6 +6,8 @@ import {Actions, Router, Scene} from 'react-native-router-flux';
 import HomeContainer from '../components/Home/HomeContainer';
 import PluginSetting from '../components/Home/PluginSettings';
 import LoginContainer from '../components/Auth/LoginContainer';
+import SplashScreen from '../components/Auth/SplashScreen';
+import MirrorScreen from '../components/MirrorScreen/MirrorScreen'
 import AppIntroContainer from '../components/AppIntro/AppIntroContainer'
 import TrainContainer from '../components/Auth/TrainContainer';
 import SignUpContainer from '../components/Auth/SignUpContainer';
@@ -140,10 +142,26 @@ export default class AppRouter extends PureComponent {
                         navigationBarStyle={routerStyles.navbar}
                         titleStyle={routerStyles.titleStyle}>
                         <Scene
-                            component={LoginContainer}
+                            component={SplashScreen}
                             duration={0}
                             hideNavBar
                             initial
+                            isDrawerEnable={false}
+                            key="SplashScreen"
+                            type="reset"
+                        />
+                        <Scene
+                            component={MirrorScreen}
+                            duration={0}
+                            hideNavBar
+                            isDrawerEnable={false}
+                            key="MirrorScreen"
+                            type="reset"
+                        />
+                        <Scene
+                            component={LoginContainer}
+                            duration={0}
+                            hideNavBar
                             isDrawerEnable={false}
                             key="login"
                             type="reset"
