@@ -55,7 +55,7 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
         super(props);
        // this.url = 'http://localhost:3100';
        // this.socket = io.connect('http://localhost:3100');
-       this.socket = new io.connect('http://localhost.:3100', {
+       this.socket = new io.connect('http://'+ config.host +':3100', {
             transports: ['websocket'] // you need to explicitly tell it to use websockets
         });
         this.socket.on('connect', () => {
@@ -146,14 +146,14 @@ export default class CheckFaceTraining extends PureComponent<void, Props, State>
 console.log('from train', JSON.stringify(responseJson))
                for(let addon of responseJson.userInstalledAddons ){
                     if(addon.description.toString().indexOf('clock')>-1){
-                       addonName='Clock'
+                       addonName='Clock';
                         iconName=image_time;
                     }
                     else if(addon.description.toString().indexOf('youtube')>-1){
-                        addonName='Youtube'
+                        addonName='Youtube';
                         iconName=image_youtube;
                     }else if(addon.description.toString().indexOf('date/time')>-1){
-                        addonName='Date Time'
+                        addonName='Date Time';
                         iconName=image_calendar;
                     }
                     global.userAddons.push([addon._id ,addonName ,iconName ,addon.npm_name , addon.userAddonId]);

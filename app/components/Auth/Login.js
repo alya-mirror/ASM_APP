@@ -49,7 +49,7 @@ export default class Login extends PureComponent<void, void, State> {
       console.log('connected')
     });
     this.state = {
-      email: 'John@yahoo.com',
+      email: 'a@a.com',
       emailErrorMessage: null,
       password: 'qwe123',
       passwordErrorMessage: null,
@@ -150,7 +150,7 @@ export default class Login extends PureComponent<void, void, State> {
 
   _fetchUserAddons() {
     const params = {userId: global.userInfo.userId};
-    let url = `http://localhost.:3100/api/addons/userId${encodeURIComponent(global.userInfo.userId)}`;
+    let url = `http://${config.host}:3100/api/addons/userId${encodeURIComponent(global.userInfo.userId)}`;
     console.log('Addons');
     return fetch(url, {
       method: 'GET',

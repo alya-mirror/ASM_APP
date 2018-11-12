@@ -173,8 +173,8 @@ export default class SplashScreen extends Component {
     redirection = () =>
     {
       setTimeout(()=>{
-          Actions.MirrorScreen();
-      },5000)
+          Actions.login();
+      },)
     };
     render() {
         try {

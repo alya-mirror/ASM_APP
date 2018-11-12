@@ -12,6 +12,7 @@ import {
 import {Actions} from 'react-native-router-flux';
 import {styles, searchBox} from './styles';
 import {Fab} from '../AnimatedButton';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Card from '../Core/Card';
 import AppText from '../Core/AppText';
 import Post from '../Post';
@@ -467,6 +468,63 @@ export default class Home extends PureComponent<void, Props, State> {
 
     }
 
+    mirrorPositionSetting()
+    {
+        return fetch('http://'+ config.host+':3100/api/userAddons/getAll/5be7c29f76c4c0141e376729', {
+            method: 'get',
+            headers: {
+                Accept: 'application/json',
+                'Content-type': 'application/json'
+            }
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                console.log('responseJson' , JSON.stringify(responseJson)   );
+               //
+                let userAddons = [];
+                return fetch('http://'+ config.host+':3100/api/addons/5be7c29f76c4c0141e376729' , {
+                    method: 'get',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-type': 'application/json'
+                    }
+                }).then((response) => response.json())
+                    .then((response) => {
+                        console.log('GET' , JSON.stringify(response.userInstalledAddons)   );
+                        for (let addon of response.userInstalledAddons)
+                        { console.log('Inn'     );
+                            for (let userPAddon of responseJson.userAddons)
+                            {
+                                if(addon._id === userPAddon.addonId)
+                                {
+                                    userAddons.push({
+                                         _id :userPAddon._id,
+                                         userId :userPAddon.userId,
+                                         addonId :userPAddon.addonId,
+                                        addonName:addon.name,
+                                         coreSettings :{
+                                             position : userPAddon.coreSettings.position
+                                        },
+                                    })
+                                }
+                            }
+                        }
+                        console.log('userPAddon' , userAddons  );
+                        Actions.MirrorScreen({userInstalledAddons:userAddons , userAddonsOrginal:responseJson.userAddons });
+                    })
+
+                    .catch((error) => {
+                        console.log(error);
+
+                    });
+
+            })
+
+            .catch((error) => {
+                console.log(error);
+
+            });
+     //
+    }
     _onPressComplete() {
 
     }
@@ -572,6 +630,22 @@ export default class Home extends PureComponent<void, Props, State> {
                             color={Colors.white}
                             name={longPressAddonsButtonIcon}
                             size={24}
+                        />
+                    </Fab>
+
+                    <Fab
+                        //duration={1000}
+                   //     onComplete={this._onAnimationComplete.bind(this)}
+                        onPress={this.mirrorPositionSetting.bind(this)}
+                        rippleColor={Colors.fadedWhite}
+                        startAnimation={startAnimation}
+                        style={styles.fabButtonSetting}
+                        width={30}
+                    >
+                        <MaterialIcon
+                            color={Colors.white}
+                            name={"settings"}
+                            size={15}
                         />
                     </Fab>
                 </View>

@@ -23,6 +23,7 @@ export default class Draggable extends Component {
         renderText:PropTypes.string,
         renderShape:PropTypes.string,
         renderSize:PropTypes.number,
+        dataSource:PropTypes.object,
         imageSource:PropTypes.oneOfType([
             PropTypes.shape({
                 uri: PropTypes.string,
@@ -66,13 +67,13 @@ export default class Draggable extends Component {
 		if(props.reverse !== undefined)
 		{
 			console.log("REVERS");
-           if(this.props.reverse === true)
+           if(props.reverse === true)
 		   {   this.fromRevers();
-               console.log("REVERS", this.props.reverse)}
+               console.log("REVERS", props.reverse)}
 		   else {
            	 this.state.pan.addListener((c) => this.state._value = c);
                this.fromRevers();
-               console.log("REVERS", this.props.reverse)
+               console.log("REVERS", props.reverse)
 
 		   }
 		}
@@ -80,7 +81,7 @@ export default class Draggable extends Component {
 
     constructor(props, defaultProps) {
         super(props, defaultProps);
-        const { pressDragRelease, reverse, onMove } = props;
+        const { pressDragRelease, reverse, onMove, dataSource } = props;
         this.state = {
             pan:new Animated.ValueXY(),
             _value:{x: 0, y: 0}
@@ -103,6 +104,9 @@ export default class Draggable extends Component {
                 if(pressDragRelease)
                     pressDragRelease(e, gestureState);
                 let Window = Dimensions.get('window');
+                let itemPositionX = (gestureState.moveX + 55 - 120);
+                let itemPositionY = (gestureState.moveY + 55 - 230);
+                pressDragRelease(e, gestureState , itemPositionX , itemPositionY , dataSource);
                 console.log("LOG", (gestureState.moveX + 55 - 120), (gestureState.moveY + 55 - 230) , Window.width , Window.height );
                 if(reverse === false)
                     this.state.pan.flattenOffset();
@@ -113,7 +117,7 @@ export default class Draggable extends Component {
     }
 
     fromRevers(){
-        const { pressDragRelease, reverse, onMove } = this.props;
+        const { pressDragRelease, reverse, onMove, dataSource } = this.props;
         this.panResponder = PanResponder.create({
             onMoveShouldSetPanResponder: (evt, gestureState) => true,
             onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
@@ -129,9 +133,13 @@ export default class Draggable extends Component {
             }], {listener: onMove}),
             onPanResponderRelease: (e, gestureState) => {
                 if(pressDragRelease)
-                    pressDragRelease(e, gestureState);
-                let Window = Dimensions.get('window');
-                console.log("LOG", (gestureState.moveX + 55 - 120), (gestureState.moveY + 55 - 230) , Window.width , Window.height );
+                {
+                    let itemPositionX = (gestureState.moveX + 55 - 120);
+                    let itemPositionY = (gestureState.moveY + 55 - 230);
+                    pressDragRelease(e, gestureState , itemPositionX , itemPositionY , dataSource);
+                    let Window = Dimensions.get('window');
+                   // console.log("itemPosition", itemPositionX, itemPositionY , Window.width , Window.height , dataSource );
+                }
                 if(reverse === false)
                     this.state.pan.flattenOffset();
                 else
@@ -217,7 +225,7 @@ export default class Draggable extends Component {
 
     render() {
         const touchableContent = this._getTextOrImage();
-        const { pressDrag, longPressDrag, pressInDrag, pressOutDrag } = this.props;
+        const { pressDrag, longPressDrag, pressInDrag, pressOutDrag, dataSource } = this.props;
 
         return (
             <View style={this._positionCss()}>
@@ -230,15 +238,17 @@ export default class Draggable extends Component {
                     <TouchableOpacity
                         style={this._dragItemCss()}
                         onPress={pressDrag}
-                        onLongPress={longPressDrag}
+                        //onLongPress={longPressDrag}
                         onPressIn={pressInDrag}
                         onPressOut={pressOutDrag}
-                        delayLongPress={2000}
+                        //delayLongPress={1000}
 
                     >
                         {touchableContent}
                     </TouchableOpacity>
 					 </Animated.View>
+
+
             </View>
         );
     }

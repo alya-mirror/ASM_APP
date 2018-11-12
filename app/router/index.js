@@ -153,10 +153,12 @@ export default class AppRouter extends PureComponent {
                         <Scene
                             component={MirrorScreen}
                             duration={0}
-                            hideNavBar
+                         //   hideNavBar
+                            title="Addons Position"
                             isDrawerEnable={false}
                             key="MirrorScreen"
                             type="reset"
+                            renderBackButton={this._renderNavigationBackButton.bind(this)}
                         />
                         <Scene
                             component={LoginContainer}
