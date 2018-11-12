@@ -4,7 +4,6 @@ import ReactNative from 'react-native';
 import {Provider} from 'react-redux';
 import Router from './router';
 import configureStore from './store/configureStore';
-import SplashScreen from 'react-native-splash-screen';
 import * as Animatable from 'react-native-animatable';
 /*import {
     BallIndicator,
@@ -37,7 +36,6 @@ export default class Root extends Component<void, void, State> {
             return null;
         }
         else {
-            setTimeout(()=>{SplashScreen.hide();},1500);
            /* return <Animatable.View animation="fadeIn" useNativeDriver delay={600} style={{
                 width: '100%', alignItems: 'center',
                 justifyContent: 'center',

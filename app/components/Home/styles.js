@@ -56,6 +56,12 @@ export const styles = StyleSheet.create({
         right: 30,
         borderRadius: 20,
     },
+    fabButtonSetting: {
+        position: 'absolute',
+        bottom: 90,
+        right: 40,
+        borderRadius: 20,
+    },
     fabButtonLeft: {
         position: 'absolute',
         bottom: 30,
