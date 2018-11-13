@@ -551,9 +551,9 @@ export default class MirrorScreen extends Component {
                         </Text></View>
 
                     {releaseItems === true ? (
-                        <View style={{position: 'absolute', bottom: 60, left: 31, width: 100, height: 30,}}>
+                        <View style={{position: 'absolute', bottom: 60, left: 105, width: 100, height: 30,}}>
                             <TouchableOpacity style={{
-                                width: 100,
+                                width: 150,
                                 height: 30,
                                 backgroundColor: "#8d3155",
                                 justifyContent: 'center',
@@ -563,7 +563,7 @@ export default class MirrorScreen extends Component {
                                                   this.setState({
                                                       releaseItems: false,
                                                       randoms: Math.random(),
-                                                      buttonName: 'Verify'
+                                                      buttonName: 'Submit'
                                                   });
 
                                                   this.forceUpdate()
@@ -572,9 +572,9 @@ export default class MirrorScreen extends Component {
                                     {this.state.buttonName}
                                 </Text></TouchableOpacity>
                         </View>
-                    ) : (<View style={{position: 'absolute', bottom: 60, left: 31, width: 100, height: 30,}}>
+                    ) : (<View style={{position: 'absolute', bottom: 60, left: 105, width: 100, height: 30,}}>
                         <TouchableOpacity style={{
-                            width: 100,
+                            width: 150,
                             height: 30,
                             backgroundColor: "#8d3155",
                             justifyContent: 'center',
@@ -582,10 +582,16 @@ export default class MirrorScreen extends Component {
                         }}
                                           onPress={() => {
                                               this.setState({
-                                                  releaseItems: true,
+                                               //   releaseItems: true,
                                                   buttonName: 'Edit',
-                                                  randoms: Math.random()
+                                                //  randoms: Math.random()
                                               });
+                                              setTimeout(()=>{Actions.home();
+                                                  this.setState({
+                                                      releaseItems: true,
+                                                      //buttonName: 'Edit',
+                                                      randoms: Math.random()
+                                                  });},100);
                                               this.forceUpdate()
                                           }}>
                             <Text style={{fontSize: 16, fontWeight: '500', color: '#fff'}}>
@@ -593,7 +599,7 @@ export default class MirrorScreen extends Component {
                             </Text></TouchableOpacity>
                     </View>)}
 
-                    {this.state.buttonName === 'Verify' ? (
+           {/*         {this.state.buttonName === 'Verify' ? (
                         <View style={{position: 'absolute', bottom: 60, right: 31,}}>
                             <TouchableOpacity style={{
                                 width: 100,
@@ -609,7 +615,7 @@ export default class MirrorScreen extends Component {
                                     Submit
                                 </Text></TouchableOpacity>
                         </View>
-                    ) : null}
+                    ) : null}*/}
 
                 </View>
             );
