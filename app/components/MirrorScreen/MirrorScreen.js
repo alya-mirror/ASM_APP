@@ -563,7 +563,7 @@ export default class MirrorScreen extends Component {
                                                   this.setState({
                                                       releaseItems: false,
                                                       randoms: Math.random(),
-                                                      buttonName: 'Cancel'
+                                                      buttonName: 'Verify'
                                                   });
 
                                                   this.forceUpdate()
@@ -593,7 +593,7 @@ export default class MirrorScreen extends Component {
                             </Text></TouchableOpacity>
                     </View>)}
 
-                    {this.state.buttonName === 'Cancel' ? (
+                    {this.state.buttonName === 'Verify' ? (
                         <View style={{position: 'absolute', bottom: 60, right: 31,}}>
                             <TouchableOpacity style={{
                                 width: 100,
