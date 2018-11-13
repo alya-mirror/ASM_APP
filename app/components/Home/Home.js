@@ -470,7 +470,7 @@ export default class Home extends PureComponent<void, Props, State> {
 
     mirrorPositionSetting()
     {
-        return fetch('http://'+ config.host+':3100/api/userAddons/getAll/5be7c29f76c4c0141e376729', {
+        return fetch('http://'+ config.host+':3100/api/userAddons/getAll/' + global.userInfo.userId, {
             method: 'get',
             headers: {
                 Accept: 'application/json',
@@ -481,7 +481,7 @@ export default class Home extends PureComponent<void, Props, State> {
                 console.log('responseJson' , JSON.stringify(responseJson)   );
                //
                 let userAddons = [];
-                return fetch('http://'+ config.host+':3100/api/addons/5be7c29f76c4c0141e376729' , {
+                return fetch('http://'+ config.host+':3100/api/addons/' + global.userInfo.userId , {
                     method: 'get',
                     headers: {
                         Accept: 'application/json',
