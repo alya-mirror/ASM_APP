@@ -17,10 +17,11 @@ import Draggable from './components/Draggable';
 import config from '../../../config.default.json'
 
 let addonsLocalPosition = [{x: 10, y: 30, position: 'w3-display-topleft',},
-    {x: 123, y: 30, position: 'w3-display-topmiddle'}, {x: 240, y: 30, position: 'w3-display-topright'},
-    {x: 10, y: 30, position: 'w3-display-left'}, {x: 10, y: 30, position: 'w3-display-middle'},
-    {x: 10, y: 30, position: 'w3-display-right'}, {x: 10, y: 30, position: 'w3-display-bottomleft'},
-    {x: 10, y: 30, position: 'w3-display-bottommiddle'}, {x: 10, y: 30, position: 'w3-display-bottomright'}];
+    {x: 123, y: 30, position: 'w3-display-topmiddle'}, {x: 230, y: 30, position: 'w3-display-topright'},
+    {x: 10, y: 150, position: 'w3-display-left'}, {x: 123, y: 150, position: 'w3-display-middle'},
+    {x: 230, y: 150, position: 'w3-display-right'}, {x: 10, y: 270, position: 'w3-display-bottomleft'},
+    {x: 123, y: 270, position: 'w3-display-bottommiddle'}, {x: 230, y: 270, position: 'w3-display-bottomright'}];
+
 
 export default class MirrorScreen extends Component {
 
@@ -343,7 +344,7 @@ export default class MirrorScreen extends Component {
             ));
         if (this.state.releaseItems === false) {
             return fetch('http://' + config.host + ':3100/api/userAddons/coreSettings/' + addonID, {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     Accept: 'application/json',
                     'Content-type': 'application/json'
@@ -358,9 +359,9 @@ export default class MirrorScreen extends Component {
                         }
                     }
                 )
-            }).then((response) => response.json())
+            })
                 .then((response) => {
-                    console.log('GET', JSON.stringify(response));
+                    console.log('Response userAddons ', JSON.stringify(response));
                 })
 
                 .catch((error) => {
