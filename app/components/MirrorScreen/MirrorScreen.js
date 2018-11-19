@@ -20,8 +20,8 @@ const Dimensions = require('Dimensions');
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 console.log('this the screen widht and height '+ screenHeight +'  XX  '+ screenWidth);
-const wmf = screenWidth/400;
-const hmf = screenHeight/690;
+const wmf = screenWidth/360;
+const hmf = screenHeight/640;
 
 let addonsLocalPosition = [
   {x: 10 * wmf, y: 30 * hmf, position: 'w3-display-topleft',},
@@ -310,35 +310,43 @@ export default class MirrorScreen extends Component {
   }
 
   pressDragReleaseHandler(itemPositionX, itemPositionY, dataSource) {
-    console.log("NAme", itemPositionX, itemPositionY, dataSource);
-    if (itemPositionX > 0.00 * wmf && itemPositionX <= 50.00 * wmf
-      && itemPositionY > 0.00 * hmf && itemPositionY <= 93.00 * hmf) {
+    console.log("NAme", itemPositionX, itemPositionY, dataSource, wmf, hmf);
+    if (itemPositionX > 0.00 * wmf && itemPositionX <= 75.00 * wmf && itemPositionY > 0.00 * hmf && itemPositionY <= 105.00 * hmf) {
 
       this.onDragChangeItemLocation("w3-display-topleft", itemPositionX, itemPositionY, dataSource)
-    } else if (itemPositionX > 93.00 * wmf && itemPositionX <= 140.00 * wmf && itemPositionY > 0.00 * hmf && itemPositionY <= 93.00 * hmf) {
+      console.log("w3-display-topleft");
+    } else if (itemPositionX > 93.00 * wmf && itemPositionX <= 140.00 * wmf && itemPositionY > 0.00 * hmf && itemPositionY <= 105.00 * hmf) {
 
       this.onDragChangeItemLocation("w3-display-topmiddle", itemPositionX, itemPositionY, dataSource)
-    } else if (itemPositionX > 180.00 * wmf && itemPositionX <= 245.00 * wmf && itemPositionY > 0.00 * hmf && itemPositionY <= 93.00 * hmf) {
+      console.log("w3-display-topmiddle");
+    } else if (itemPositionX > 180.00 * wmf && itemPositionX <= 245.00 * wmf && itemPositionY > 0.00 * hmf && itemPositionY <= 105.00 * hmf) {
 
       this.onDragChangeItemLocation("w3-display-topright", itemPositionX, itemPositionY, dataSource)
-    } else if (itemPositionX > 0.00 * wmf && itemPositionX <= 50.00 * wmf && itemPositionY > 110.00 * hmf && itemPositionY <= 167.00 * hmf) {
+      console.log("w3-display-topright");
+    } else if (itemPositionX > 0.00 * wmf && itemPositionX <= 75.00 * wmf && itemPositionY > 166.00 * hmf && itemPositionY <= 248.00 * hmf) {
 
       this.onDragChangeItemLocation("w3-display-left", itemPositionX, itemPositionY, dataSource)
-    } else if (itemPositionX > 93.00 * wmf && itemPositionX <= 140.00 * wmf && itemPositionY > 110.00 * hmf && itemPositionY <= 167.00 * hmf) {
+      console.log("w3-display-left");
+    } else if (itemPositionX > 93.00 * wmf && itemPositionX <= 140.00 * wmf && itemPositionY > 166.00 * hmf && itemPositionY <= 248.00 * hmf) {
 
       this.onDragChangeItemLocation("w3-display-middle", itemPositionX, itemPositionY, dataSource)
-    } else if (itemPositionX > 180.00 * wmf && itemPositionX <= 245.00 * wmf && itemPositionY > 110.00 * hmf && itemPositionY <= 167.00 * hmf) {
+      console.log("w3-display-middle");
+    } else if (itemPositionX > 180.00 * wmf && itemPositionX <= 245.00 * wmf && itemPositionY > 166.00 * hmf && itemPositionY <= 248.00 * hmf) {
 
       this.onDragChangeItemLocation("w3-display-right", itemPositionX, itemPositionY, dataSource)
-    } else if (itemPositionX > 0.00 * wmf && itemPositionX <= 50.00 * wmf && itemPositionY > 222.00 * hmf && itemPositionY <= 306.00 * hmf) {
+      console.log("w3-display-right");
+    } else if (itemPositionX > 0.00 * wmf && itemPositionX <= 50.00 * wmf && itemPositionY > 282.00 * hmf && itemPositionY <= 350.00 * hmf) {
 
       this.onDragChangeItemLocation("w3-display-bottomleft", itemPositionX, itemPositionY, dataSource)
-    } else if (itemPositionX > 93.00 * wmf && itemPositionX <= 140.00 * wmf && itemPositionY > 222.00 * hmf && itemPositionY <= 306.00 * hmf) {
+      console.log("w3-display-bottomleft");
+    } else if (itemPositionX > 93.00 * wmf && itemPositionX <= 140.00 * wmf && itemPositionY > 282.00 * hmf && itemPositionY <= 350.00 * hmf) {
 
       this.onDragChangeItemLocation("w3-display-bottommiddle", itemPositionX, itemPositionY, dataSource)
-    } else if (itemPositionX > 180.00 * wmf && itemPositionX <= 245.00 * wmf && itemPositionY > 222.00 * hmf && itemPositionY <= 306.00 * hmf) {
+      console.log("w3-display-bottommiddle");
+    } else if (itemPositionX > 180.00 * wmf && itemPositionX <= 245.00 * wmf && itemPositionY > 282.00 * hmf && itemPositionY <= 350.00 * hmf) {
 
       this.onDragChangeItemLocation("w3-display-bottomright", itemPositionX, itemPositionY, dataSource)
+      console.log("w3-display-bottomright");
     }
 
   }
@@ -554,20 +562,20 @@ export default class MirrorScreen extends Component {
             {this.generateAppList()}
           </View>
 
-          <View style={{position: 'absolute', top: 60, left: 31,}}><Text
-            style={{fontSize: 16, fontWeight: '500'}}>
+          <View style={{position: 'absolute', top: 60*hmf, left: 31*wmf,}}><Text
+            style={{fontSize: 16*wmf, fontWeight: '500'}}>
             Addons Positions
           </Text>
-            <Text style={{fontSize: 11, fontWeight: '400', width: 330}}>
+            <Text style={{fontSize: 11*wmf, fontWeight: '400', width: 330*wmf}}>
               Change your installed addons position on Alaya Mirror by moving it to the
               available positions.
             </Text></View>
 
           {releaseItems === true ? (
-            <View style={{position: 'absolute', bottom: 60, left: 105, width: 100, height: 30,}}>
+            <View style={{position: 'absolute', bottom: 60*hmf, left: 105*wmf, width: 100*wmf, height: 30*hmf,}}>
               <TouchableOpacity style={{
-                width: 150,
-                height: 30,
+                width: 150*wmf,
+                height: 30*hmf,
                 backgroundColor: "#8d3155",
                 justifyContent: 'center',
                 alignItems: 'center'
@@ -585,10 +593,10 @@ export default class MirrorScreen extends Component {
                   {this.state.buttonName}
                 </Text></TouchableOpacity>
             </View>
-          ) : (<View style={{position: 'absolute', bottom: 60, left: 105, width: 100, height: 30,}}>
+          ) : (<View style={{position: 'absolute', bottom: 60, left: 105, width: 100*wmf, height: 30*hmf,}}>
             <TouchableOpacity style={{
-              width: 150,
-              height: 30,
+              width: 150*wmf,
+              height: 30*hmf,
               backgroundColor: "#8d3155",
               justifyContent: 'center',
               alignItems: 'center'
